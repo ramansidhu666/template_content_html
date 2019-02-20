@@ -1,0 +1,79 @@
+﻿@model IEnumerable<HomeHelp.Models.AgencyJobModel>
+@{
+    ViewBag.Title = "Agencies";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div style="margin-top:2%">
+    @{
+        Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+    }
+</div>
+<h2 class="page-header">Completed Request</h2>
+<!-- begin row -->
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+
+                <h4 class="panel-title"></h4>
+            </div>
+            <div class="panel-body table-responsive">
+                <table id="example" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Contact Number</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{ var odd = true; }
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(odd ? "odd gradeX" : "even gradeX")">
+                                <td>@item.requestModel.FirstName</td>
+                                <td>@item.requestModel.LastName</td>
+                                <td>@item.requestModel.EmailId</td>
+                                <td>@item.requestModel.Address</td>
+                                <td>@item.requestModel.MobileNumber</td>
+                                <td>@item.requestModel.Description</td>
+                                <td><input type="button" value="Detail" class="btn btn-success m-r-5 m-b-5" /></td>
+                            </tr>
+                            odd = !odd;
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+<!-- end row -->
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        var pageNo = @ViewBag.currentPageNumber;
+        if(parseInt(@ViewBag.currentPageNumber)>0)
+        {
+            var table = $('#example').DataTable({"displayStart": (10*parseInt(@ViewBag.currentPageNumber))-10});
+        }
+        else{
+            $('#example').DataTable();
+        }
+        $('#example').on('page.dt', function () {
+            var info = $('#example').DataTable().page.info();
+            pageNo = info.page + 1;
+            $.get('@Url.Action("Pagination", "Agency")', {currentPageNumber: pageNo,currentView:"Index"}, function (data) {
+            });
+        });
+    });
+</script>

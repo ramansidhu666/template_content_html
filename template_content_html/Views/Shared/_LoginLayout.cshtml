@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]>       <html class="ie ie10"><!-->
+<html class="">
+<!--<![endif]-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - HomeHelp</title>
+
+
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    @*<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">*@
+    <link href="~/assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/assets/css/animate.min.css" rel="stylesheet" />
+    <link href="~/assets/css/style.min.css" rel="stylesheet" />
+    <link href="~/assets/css/style-responsive.min.css" rel="stylesheet" />
+    <link href="~/assets/css/theme/default.css" rel="stylesheet" id="theme" />
+    <link href="~/assets/plugins/sweetalert-master/dist/sweetalert.css" rel="stylesheet" />
+    <!-- ================== END BASE CSS STYLE ================== -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    @*<script src="assets/plugins/pace/pace.min.js"></script>*@
+    <!-- ================== END BASE JS ================== -->
+    <!-- JAVASCRIPT FILES -->
+   <script type="text/javascript" src="~/assetsOld/plugins/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="~/assetsOld/plugins/jquery.isotope.js"></script>
+    <script type="text/javascript" src="~/assetsOld/plugins/masonry.js"></script>
+
+    <script type="text/javascript" src="~/assetsOld/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assetsOld/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script type="text/javascript" src="~/assetsOld/plugins/owl-carousel/owl.carousel.min.js"></script>
+    <script type="text/javascript" src="~/assetsOld/plugins/knob/js/jquery.knob.js"></script>
+    <script type="text/javascript" src="~/assetsOld/plugins/flexslider/jquery.flexslider-min.js"></script>
+
+    <!-- REVOLUTION SLIDER -->
+    @*<script type="text/javascript" src="~/assets/plugins/revolution-slider/js/jquery.themepunch.plugins.min.js"></script>
+        <script type="text/javascript" src="~/assets/plugins/revolution-slider/js/jquery.themepunch.revolution.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/revolution_slider.js"></script>
+
+
+        <script type="text/javascript" src="~/assets/js/scripts.js"></script>*@
+
+
+
+</head>
+<!--
+    Available body classes:
+        smoothscroll			= enable chrome browser smooth scroll
+        grey 					= grey content background
+        boxed 					= boxed style
+        pattern1 ... pattern10 	= background pattern
+
+    Background Image - add to body:
+        data-background="assets/images/boxed_background/1.jpg"
+-->
+
+
+<body class="pace-top">
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+
+    <div class="login-cover">
+        <div class="login-cover-image"><img src="~/assets/img/login-bg/bg-4.jpg" data-id="login-cover-image" alt="" /></div>
+        <div class="login-cover-bg"></div>
+    </div>
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade">
+        <!-- begin login -->
+        @RenderBody()
+
+        <!-- end login -->
+
+        @*<ul class="login-bg-list">
+            <li class="active"><a href="#" data-click="change-bg"><img src="~/assets/img/login-bg/bg-1.jpg" alt="" /></a></li>
+            <li><a href="#" data-click="change-bg"><img src="~/assets/img/login-bg/bg-2.jpg" alt="" /></a></li>
+            <li><a href="#" data-click="change-bg"><img src="~/assets/img/login-bg/bg-3.jpg" alt="" /></a></li>
+            <li><a href="#" data-click="change-bg"><img src="~/assets/img/login-bg/bg-4.jpg" alt="" /></a></li>
+            <li><a href="#" data-click="change-bg"><img src="~/assets/img/login-bg/bg-5.jpg" alt="" /></a></li>
+            <li><a href="#" data-click="change-bg"><img src="~/assets/img/login-bg/bg-6.jpg" alt="" /></a></li>
+        </ul>*@
+
+
+    </div>
+
+    <!-- end page container -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="~/assets/plugins/jquery/jquery-1.9.1.min.js"></script>
+    <script src="~/assets/plugins/jquery/jquery-migrate-1.1.0.min.js"></script>
+    <script src="~/assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!--[if lt IE 9]>
+        <script src="assets/crossbrowserjs/html5shiv.js"></script>
+        <script src="assets/crossbrowserjs/respond.min.js"></script>
+        <script src="assets/crossbrowserjs/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="~/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/assets/plugins/jquery-cookie/jquery.cookie.js"></script>
+    <!-- ================== END BASE JS ================== -->
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/js/login-v2.demo.min.js"></script>
+    <script src="~/assets/plugins/gritter/js/jquery.gritter.js"></script>
+    <script src="~/assets/js/ui-modal-notification.demo.min.js"></script>
+    <script src="~/assets/plugins/sweetalert-master/dist/sweetalert.min.js"></script>
+    <script src="~/assets/js/apps.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+
+    <script>
+        $(document).ready(function () {
+            App.init();
+            LoginV2.init();
+            Notification.init();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

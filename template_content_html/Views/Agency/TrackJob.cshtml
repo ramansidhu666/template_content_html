@@ -1,0 +1,71 @@
+﻿@model HomeHelp.Models.CustomerLocationModel
+@{
+    ViewBag.Title = "Agencies";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style>
+    #map {
+        height: 700px;
+        width: 100%;
+    }
+</style>
+
+<div style="margin-top:2%">
+    @{
+        Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+    }
+</div>
+<h2 class="page-header">Track Record</h2>
+<!-- begin row -->
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12">
+        <!-- begin panel -->
+        <div id="map"></div>  
+       
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+<!-- end row -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnAfcUanP6UV_-jEekg_NwwPUaDJp6it4&callback=initMap">
+</script>
+<script>
+    var map;
+    var marker;
+    function initMap() {
+        debugger
+        var uluru = { lat: @Model.Latitude, lng: @Model.Longitude };
+        map = new google.maps.Map(document.getElementById('map'), {
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        map.setCenter(uluru);
+        map.setZoom(18);
+        marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
+    
+       
+        setInterval(function(){
+            getMarkers() // this will run after every 5 seconds
+        }, 5000);
+       
+        
+        function getMarkers() {
+            $.get('/Agency/UpdateTrackJob', {jobRequestId:'@Model.CustomerIdTo'}, function(res,resp) {
+                var uluru = { lat: res.Latitude, lng: res.Longitude };
+                map.setCenter(uluru);
+                map.setZoom(18);
+                marker.setMap(null);
+                marker=new google.maps.Marker({
+                    position: uluru,
+                    map: map
+                });
+            }, "json");
+        }
+   
+
+</script>

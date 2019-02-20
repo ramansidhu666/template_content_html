@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Onlo.Models.CustomerModel>
+@{
+    ViewBag.Title = "Subscription Mail";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<h2 class="text-center">
+    Vendors
+</h2>
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        $('.md-icon material-icons').tooltip();
+        $('.sss').tooltip();
+
+    });
+</script>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+<p class="operation">
+    @*@if (Convert.ToBoolean(TempData["Create"]) == true)
+        {*@
+    <i class="glyphicon glyphicon-share-alt create_icon"></i>
+    @Html.ActionLink("Create New", "Create")
+    @*}*@
+</p>
+
+@using (Html.BeginForm())
+{
+    <div class="md-card-content">
+        <div data-uk-grid-margin="" class="uk-grid">
+            <div class="uk-width-medium-3-10">
+                <div class="">
+                    <label for="product_Company_name">
+                        Company Name
+                    </label>
+                    @Html.TextBox("CompanyName", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                </div>
+
+            </div>
+            <div class="uk-width-medium-3-10">
+                <div class="">
+                    <label for="product_search_Email">Email</label>
+                    @Html.TextBox("Email", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                </div>
+
+            </div>
+            <div class="uk-width-medium-1-10">
+                <div class="">
+                    <label for="product_search_Name">Full Name</label>
+                    @Html.TextBox("Name", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                </div>
+
+            </div>
+
+            <div class="uk-width-medium-2-10 uk-text-center">
+                <input type="submit" value="Search" data-id="search" class="md-btn md-btn-primary uk-margin-small-top" />
+                @*<a class="md-btn md-btn-primary uk-margin-small-top" href="#">Filter</a>*@
+            </div>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="mytable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-1-10 uk-text-center"><span>Logo</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Company Name</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Full Name</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Email Address</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Subscription StartDate</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Subscription EndDate</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Actions</span></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <tr>
+                                <td class="uk-text-center">
+                                    @if ((@item.LogoPath != "") && (@item.LogoPath != null))
+                                    {
+                                        <img class="md-user-image" src="@Url.Content(item.LogoPath)" alt="" />
+                                    }
+                                </td>
+
+                                <td class="uk-text-center">@item.CompanyName</td>
+                                <td class="uk-text-center">@item.FirstName</td>
+                                <td class="uk-text-center">@item.EmailID</td>
+
+                                @{
+
+                                    var SubscriptionStartDate = @item.SubscriptionStartDate;
+                                    var Subscription_StartDate = Convert.ToDateTime(SubscriptionStartDate).ToShortDateString();
+                                }
+                                <td class="uk-text-center">@Subscription_StartDate</td>
+                                @{
+
+                                    var SubscriptionEndDate = @item.SubscriptionEndDate;
+                                    var Subscription_EndDate = Convert.ToDateTime(SubscriptionEndDate).ToShortDateString();
+                                }
+                                <td class="uk-text-center">@Subscription_EndDate</td>
+                                <td class="uk-text-center">
+                                    @*<a href="#"><i class="md-icon material-icons">&#xE254;</i></a>*@
+                                    <a href="@Url.Action("SendEmailToVendorForsubscription", "Vendor", new { id = item.CustomerId })" title="Subscription Mail"><i class="md-icon material-icons">&#xE158;</i></a>
+                                    
+
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+}
+@{
+    if (Model.ToList().Count == 0)
+    {
+        TempData["Message"] = "No Record found !";
+    }
+    else
+    {
+        Html.RenderAction("Paging", "Base");
+    }
+}
+

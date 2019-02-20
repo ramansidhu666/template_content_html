@@ -1,0 +1,52 @@
+﻿@{
+    if (ViewBag.ShowMessage != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                setTimeout(function () { $('#message').show().fadeOut('slow'); }, 5000);
+            });
+        </script>
+        if (ViewBag.ShowMessage == "success")
+        {
+            <div class="uk-notify-message uk-notify-message-success" style="opacity: 0.315938 ; margin-top: -28.7306px; margin-bottom: 3.15938px;" id="message">
+                <div class="row">
+
+                    <div class="alert alert-success fade in m-b-15">
+                        <strong>@ViewBag.MessageBody</strong>
+
+                        <span class="close" data-dismiss="alert">×</span>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+
+
+
+        if (ViewBag.ShowMessage == "error")
+        {
+
+            <div class="uk-notify-message uk-notify-message-danger" style="opacity: 1; margin-top: 0px; margin-bottom: 10px;" id="message">
+                <!-- ERROR -->
+                <div class="row">
+
+                    <div class="alert alert-danger fade in m-b-15">
+                        <strong>@ViewBag.MessageBody</strong>
+
+                        <span class="close" data-dismiss="alert">×</span>
+                    </div>
+                </div>
+                <a class="uk-close"></a><div><a class="notify-action" href="#"></a></div>
+
+            </div>
+
+            @*<div id="message" class="alert alert-danger">
+
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @ViewBag.MessageBody
+                </div>*@
+        }
+    }
+}
+

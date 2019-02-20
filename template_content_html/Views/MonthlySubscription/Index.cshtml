@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Onlo.Models.MonthlySubscriptionModel>
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        $('.md-icon material-icons').tooltip();
+      
+
+    });
+</script>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+<p class="operation">
+    @*@if (Convert.ToBoolean(TempData["Create"]) == true)
+        {*@
+    <i class="glyphicon glyphicon-share-alt create_icon"></i>
+    @Html.ActionLink("Create New", "Create")
+    @*}*@
+</p>
+
+@using (Html.BeginForm())
+{
+    <div class="md-card-content">
+        <div data-uk-grid-margin="" class="uk-grid">
+            <div class="uk-width-medium-3-10">
+                <div class="">
+                    <label for="product_Company_name">
+                        Month
+                    </label>
+
+                    @Html.TextBox("MonthlySubscriptionName", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                </div>
+
+            </div>
+           
+            <div class="uk-width-medium-2-10 uk-text-center">
+                <input type="submit" value="Search" data-id="search" class="md-btn md-btn-primary uk-margin-small-top" />  
+            </div>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="mytable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-1-10 uk-text-center"><span>Subscription Month</span></th>
+                               <th class="uk-width-1-10 uk-text-center"><span>SubscriptionPrice</span></th>
+                            <th class="uk-width-1-10 uk-text-center"><span>Status</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Actions</span></th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <tr>
+                                <td class="uk-text-center">@item.SubscriptionMonth</td>
+                                <td class="uk-text-center">@item.SubscriptionPrice</td>
+                                <td class="uk-text-center">@Html.DisplayFor(modelItem => item.IsActive)</td>
+                                <td class="uk-text-center">
+                                    @*<a href="#"><i class="md-icon material-icons">&#xE254;</i></a>*@
+                                    <a href="@Url.Action("Edit", "MonthlySubscription", new { id = item.MonthlySubscriptionId })" title="Edit"><i class="md-icon material-icons">&#xE254;</i></a>
+                                    @*<a href="@Url.Action("Details", "Item", new { id = item.ItemId })"><i class="md-icon material-icons">&#xE88F;</i></a>*@
+
+                                </td>
+                           
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+}
+@{
+    if (Model.ToList().Count == 0)
+    {
+        TempData["Message"] = "No Record found !";
+    }
+    else
+    {
+        Html.RenderAction("Paging", "Base");
+    }
+}

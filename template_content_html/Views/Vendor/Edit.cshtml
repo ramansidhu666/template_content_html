@@ -1,0 +1,255 @@
+﻿@model Onlo.Models.CustomerModel
+@{
+    ViewBag.Title = "Manufacturer";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+<style type="text/css">
+
+    .listbox{
+
+        width:100%;
+    }
+</style>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script type="text/javascript">
+    google.maps.event.addDomListener(window, 'load', function () {
+        var places = new google.maps.places.Autocomplete(document.getElementById('txtValue'));
+
+
+    });
+    $(document).ready(function () {
+       
+        $('.chosen-select').chosen({ no_results_text: 'Oops, nothing found!' });
+
+
+        $("input[name='add']").click(function () {
+
+
+            $('#Country_DDl').append(
+                     $('#CompanyLocationList').append(
+                    $('<option></option>').text($('#txtValue').val())));
+            $('#txtValue').val('');
+
+
+        });
+        $("input[name='delete']").click(function () {
+           
+            var $select = $('#CompanyLocationList');
+            $('option:selected', $select).remove();
+
+            $('#txtValue').val('');
+        });
+        $("#btncancel").click(function (event) {
+
+            event.preventDefault();
+            var url = '@Url.Action("Index", "vendor")';
+            window.location.href = url;
+        });
+        function checkfile() {
+            debugger
+            var file = getNameFromPath($("#ImageUpload1").val());
+            if (file != null) {
+                var extension = file.substr((file.lastIndexOf('.') + 1));
+                //alert(extension);
+                switch (extension.toLowerCase()) {
+                    case 'pdf':
+
+                        flag = true;
+                        break;
+                    default:
+                        flag = false;
+                }
+            }
+            if (flag == false) {
+                $("#spanfile").html("You can upload only pdf extension file");
+                return false;
+
+            }
+            else {
+                //var size = GetFileSize('fileToUpload');
+                //if (size > 3) {
+                //    $("#spanfile").html("You can upload file up to 3 MB");
+                //    return false;
+                //}
+                //else {
+                //    $("#spanfile").html("");
+                //}
+            }
+        }
+    });
+
+    function showimagepreviews(input) {
+
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#imgprvw').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+
+    }
+    function showimagepreview(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+
+                $('#imgprvws').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+
+    }
+  
+</script>
+@using (Html.BeginForm("Edit", "Vendor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+     @Html.HiddenFor(model=>model.CustomerId)
+    @Html.HiddenFor(model=>model.UserId)
+    @Html.HiddenFor(model=>model.EmailID)
+     @Html.HiddenFor(model=>model.CompanyID)
+    <h3 class="heading_b uk-margin-bottom">Manufacturer</h3>
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            <form id="form_validation" class="uk-form-stacked">
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        <label>Select Image</label>
+                        <div class="parsley-row">
+
+                            <div class="uk-form-file md-btn md-btn-primary">
+                                Select
+                                <input type="file" name="file1" id="ImageUpload" onchange="showimagepreviews(this)" class="fil" />
+
+                            </div>
+                            <div style="float:left">
+                                @if ((@Model.LogoPath != "") && (@Model.LogoPath != null))
+                                {
+                                    <img id="imgprvw" alt="" width="150" height="100" width="100" alt="No Logo" src="@Url.Content(@Model.LogoPath)" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        <label>Select Brochure</label>
+
+                        <div class="parsley-row">
+
+                            <div class="uk-form-file md-btn md-btn-primary">
+                                Select
+                                <input type="file" name="file2" id="ImageUpload1" class="fil" accept="application/pdf" />
+
+                                @*//<img id="imgprvws" alt="" width="150" height="100" width="100" alt="No Logo" />*@
+
+                            </div>
+                            <div style="float:left">
+                                @if ((@Model.BusinessBrochureUrl != "") && (@Model.BusinessBrochureUrl != null))
+                                {
+                                    <img id="imgprvw" alt="" width="150" height="100" width="100" alt="No Logo" src="@Url.Content(@Model.BusinessBrochureUrl)" />
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                           @Html.LabelForRequired(model => model.FirstName)
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "md-input" })
+                            @Html.ValidationMessageFor(model => model.FirstName, null, new { @class = "validationErrorMessagecolor" })
+                        </div>
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        <div class="uk-form-row parsley-row">
+                            @Html.LabelForRequired(model => model.EmailID)
+                            @Html.TextBoxFor(model => model.EmailID, new { @class = "md-input", @readonly = "readonly" } )
+                            @Html.ValidationMessageFor(model => model.EmailID, null, new { @class = "validationErrorMessagecolor" })
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                            @Html.LabelForRequired(model => model.CompanyName)
+                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "md-input" })
+                            @Html.ValidationMessageFor(model => model.CompanyName, null, new { @class = "validationErrorMessagecolor" })
+                        </div>
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                            <label for="email">About Company<span class="req"></span></label>
+                            @Html.TextBoxFor(model => model.AboutCompany, new { @class = "md-input" })
+                            @*<input type="text" name="email" data-parsley-trigger="change" required class="md-input" value="@Model.AboutCompany" />*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                            <label for="fullname">Vision<span class="req"></span></label>
+                            @Html.TextBoxFor(model => model.VisionMission, new { @class = "md-input" })
+                            @*<input type="text" name="fullname" required class="md-input" value="@Model.VisionMission" />*@
+                        </div>
+                    </div>
+                    <div class="parsley-row">
+                        <label for="fullname">Other Information<span class="req"></span></label>
+                        @Html.TextBoxFor(model => model.OtherInformation, new { @class = "md-input" })
+                        @*<input type="text" name="fullname" required class="md-input" value="@Model.OtherInformation" />*@
+                    </div>
+
+                </div>
+                <div class="uk-grid">
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                            @*<input name="txtValue" type="text" id="txtValue" />*@
+                            <div class="row">
+                                @*<input type="button" name="add" value="Add" />*@
+                            </div>
+                            <div>
+                                <input type="text" name="txtValue" data-parsley-trigger="change" class="md-input" id="txtValue" />
+                                @*<input name="txtValue" type="text" id="txtValue" />*@
+
+                                @*<select name="LocationLists" multiple id="@Model.CompanyLocationList" style="width:100%" required>
+                                    <option value="empty"></option>
+                                </select>*@
+
+                              @Html.ListBox("CompanyLocationList", new SelectList(Model.CompanyLocationList), new {@class="listbox" ,required = "required" })
+                            </div>
+                            <input type="button" name="add" value="Add" class="md-btn md-btn-primary" />
+                            <input type="button" name="delete" value="Delete" id="btndelete" class="md-btn md-btn-primary" />
+
+                        </div>
+                    </div>
+                    @*<div class="uk-width-medium-1-2">
+                        @Html.LabelFor(model => model.SelectedEquiments)
+                        <div class="parsley-row">
+                            @Html.ListBoxFor(m => m.SelectedEquiments, Model.EquimentList, new { @class = "chosen-select MutiselectionInputBox", data_placeholder = "Equiments..." })
+
+                        </div>
+                    </div>*@
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-1-1" style="text-align:center">
+                        <input type="submit" value="Submit" class="md-btn md-btn-primary" />
+                        <input type="button" value="Cancel" class="md-btn md-btn-primary" id="btncancel" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<p class="operation">
+    <i class="fa fa-mail-reply create_icon"></i>
+    @Html.ActionLink(" Back to List", "Index")
+</p>

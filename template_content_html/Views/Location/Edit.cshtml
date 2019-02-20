@@ -1,0 +1,160 @@
+﻿@model HomeHelp.Models.CategoryModel
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style type="text/css">
+    .fil {
+        border-style: solid;
+        border-width: 0 0 1px;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+<style type="text/css">
+    .listbox {
+        width: 100%;
+    }
+</style>
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        $('.chosen-select').chosen({ no_results_text: 'Oops, nothing found!' });
+
+        $("#btncancel").click(function (event) {
+            debugger;
+            event.preventDefault();
+            var url = '@Url.Action("Index", "Category")';
+            window.location.href = url;
+        });
+
+    });
+</script>
+@using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.CategoryId)
+    @*@Html.HiddenFor(model => model.ParentId);*@
+    @Html.HiddenFor(model => model.CurrentPageNo)
+      <h2 class="page-header">Edit Location</h2>
+ 
+			<!-- begin page-header -->
+    <h1 class="page-header">Profile Page <small>header small text goes here...</small></h1>
+			<!-- end page-header -->
+			<!-- begin profile-container -->
+    <div class="profile-container">
+        <!-- begin profile-section -->
+        <div class="profile-section">
+            <!-- begin profile-left -->
+            <div class="profile-left">
+                <!-- begin profile-image -->
+                <div class="profile-image">
+                    <img src="~/assets/img/profile-cover.jpg" />
+                    <i class="fa fa-user hide"></i>
+                </div>
+                <!-- end profile-image -->
+                <div class="m-b-10">
+                    <a href="#" class="btn btn-warning btn-block btn-sm">Change Picture</a>
+                    <input type="file" class="btn btn-warning btn-block btn-sm"  name="file" id="file" />
+                </div>
+               
+            </div>
+            <!-- end profile-left -->
+            <!-- begin profile-right -->
+            <div class="profile-right">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="table-responsive">
+                        <table class="table table-profile">
+
+                            <tbody>
+                                <tr class="highlight"></tr>
+                                <tr>
+                                    <td class="field">Name</td>
+                                    <td>@Html.TextBoxFor(model => model.Name, new { @class = "form-control" })</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="field">Description</td>
+                                    <td>@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 10 })</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Created On</td>
+                                    <td><a href="#">@Html.DisplayFor(model => model.CreatedOn)</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field"></td>
+                                    <td><button type="submit" class="btn btn-success m-r-5 m-b-5">Update</button>
+<input type="button" value="Cancel" class="btn btn-danger m-r-5 m-b-5" onclick="location.href='@Url.Action("Index", "Category")'" /></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- end table -->
+                </div>
+                <!-- end profile-info -->
+            </div>
+            <!-- end profile-right -->
+        </div>
+        <!-- end profile-section -->
+
+    </div>
+			<!-- end profile-container -->
+
+    <div class="col-md-6 ui-sortable" hidden="hidden">
+        <div class="panel panel-inverse" data-sortable-id="form-stuff-1">
+            <div class="panel-heading">
+
+                <h4 class="panel-title">Edit category</h4>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <label class="col-md-3 control-label">Name</label>
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 control-label">Description</label>
+                        <div class="col-md-7">
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                            @*<textarea class="form-control" placeholder="Textarea" rows="5"></textarea>*@
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 control-label">Images</label>
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <div class="col-md-9">
+                            <button type="submit" class="btn btn-success m-r-5 m-b-5">Update</button>
+                            <input type="button" value="Cancel" class="btn btn-danger m-r-5 m-b-5" onclick="location.href='@Url.Action("Index", "Category")'" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+}
+<p class="operation">
+    <i class="fa fa-mail-reply create_icon"></i>
+    @Html.ActionLink(" Back to List", "Index")
+</p>

@@ -1,0 +1,168 @@
+﻿@model HomeHelp.Models.RewardModel
+@{
+    ViewBag.Title = "Reward";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.chosen-select').chosen({ no_results_text: 'Oops, nothing found!' });
+
+        $("#btncancel").click(function (event) {
+            debugger;
+            event.preventDefault();
+            var url = '@Url.Action("Index", "Reward")';
+            window.location.href = url;
+        });
+
+
+    });
+    function readURL(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.blah')
+                    .attr('src', e.target.result)
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<style type="text/css">
+ 
+    .gallery .image-info .title {
+        margin: 0 0 10px;
+        line-height: 18px;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        float: left !important;
+        width: 80% !important;
+    }
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+        background: #f59c1a !important;
+        border-color: #f59c1a !important;
+        width: 100% !important;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            cursor: inherit;
+            display: block;
+        }
+    .red {
+        color: red;
+    }
+
+    .font {
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+
+
+@using (Html.BeginForm("Create", "Reward", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<h2 class="page-header">Create Category</h2>
+			<!-- end page-header -->
+			<!-- begin profile-container -->
+    <div class="profile-container">
+        <!-- begin profile-section -->
+		<div class="col-md-7 col-sm-7">
+        <div class="profile-section">
+            <!-- begin profile-left -->
+            <div class="profile-left">
+                <!-- begin profile-image -->
+                <div class="profile-image">
+                   
+                        @*<img class="blah md-user-image" src="@Url.Content(Model.ImagePath)" alt="" style="height:100%;width:100%" />*@
+ @*<input type='file' onchange="readURL(this);" name="file" id="file" accept="image/*" />*@
+    <img class="blah md-user-image" src="~/assets/img/download.jpg" style="height:100%;width:100%" />
+
+                   
+                    @*<img src="~/assets/img/profile-cover.jpg" />*@
+                    <i class="fa fa-user hide"></i>
+                </div>
+                <!-- end profile-image -->
+                <div class="m-b-10">
+
+                    <span class="btn btn-default btn-file">
+                        Upload Picture <input type='file' onchange="readURL(this);" name="file" id="file" accept="image/*" />
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- end profile-left -->
+            <div class="profile-right">
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="">
+                        <div class="m-t-10">
+                            <div class="field font">Title <span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.Title, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Title)</div>
+                        </div>
+
+                        <div class="m-t-10">
+                            <div class="field font">Description<span>*</span></div>
+
+                            <div>@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 10 })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Description)</div>
+                        </div>
+                        <div class="m-t-10">
+                            <div class="field font">Number of smileys <span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.Smileys, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Smileys)</div>
+                        </div>
+                       
+                        <div>
+                            <div class="field font"></div>
+                            <div class="m-t-10">
+                                <button type="submit" class="btn btn-success m-r-5 m-b-5">Create</button>
+                                <input type="button" value="Cancel" class="btn btn-danger m-r-5 m-b-5" onclick="location.href='@Url.Action("Index", "Category")'" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end table -->
+                </div>
+                </div>
+            </div>
+               
+        </div>
+        <!-- end profile-section -->
+
+    </div>
+			<!-- end profile-container -->
+
+}
+
+<ul class="pager">
+    <li class="previous"><a href="@Url.Action("Index") ">← Back to List</a></li>
+</ul>
+
+

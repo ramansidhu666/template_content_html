@@ -1,0 +1,146 @@
+﻿@model IEnumerable<Onlo.Models.ServiceItemModel>
+@{
+    ViewBag.Title = "Service";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        $('.md-icon material-icons').tooltip();
+      
+
+    });
+</script>
+
+<style type="text/css">
+    .material-icons1 {
+        color: rgba(0, 0, 0, 0.54);
+        display: inline-block;
+        font-family: "Material Icons";
+        font-feature-settings: "liga";
+        font-size: 31px;
+        font-style: normal;
+        font-weight: 400;
+        height: 1em;
+        letter-spacing: normal;
+        line-height: 1;
+        text-rendering: optimizelegibility;
+        text-transform: none;
+        vertical-align: -4px;
+        width: 1em;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+<p class="operation">
+    @*@if (Convert.ToBoolean(TempData["Create"]) == true)
+        {*@
+    <i class="glyphicon glyphicon-share-alt create_icon"></i>
+    @Html.ActionLink("Create New", "Create")
+    @*}*@
+</p>
+
+@using (Html.BeginForm())
+{
+    <div class="md-card">
+        <div class="md-card-content">
+            <div data-uk-grid-margin="" class="uk-grid">
+                <div class="uk-width-medium-3-10">
+                    <div style="margin-left:10px" class="">
+                        <label for="product_Company_name">
+                            Service Name
+                        </label>
+                        @Html.TextBox("SerivceItemName", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                    </div>
+
+                </div>
+
+                <div class="uk-width-medium-2-10 uk-text-center">
+                    <input type="submit" value="Search" data-id="search" class="md-btn md-btn-primary uk-margin-small-top" />
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="mytable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-medium-3-10 uk-text-center"><span>Service Name</span></th>
+                            <th class="uk-width-3-10 uk-text-center"><span>Status</span></th>
+                            <th class="uk-width-3-10 uk-text-center"><span>Actions</span></th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <tr>
+                                <td class="">@item.ServiceItemName</td>
+                                <td class="uk-text-center">@Html.DisplayFor(modelItem => item.IsActive)</td>
+                                <td class="uk-text-center">
+                                   
+                                    <a style="" href="@Url.Action("Edit","SerivceItem", new { id = item.ServiceItemId, CurrentPageNo = @ViewBag.CurrentPageNo })" data-toggle="tooltip" data-placement="top" data-original-title="Edit" class="glyphicon glyphicon-edit edit_icon" title="Edit"><img src="/assets/img/edit.png" class="edit" /></a>
+                                   
+                                </td>
+                           
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+}
+@{
+    if (Model.ToList().Count == 0)
+    {
+        TempData["Message"] = "No Record found !";
+    }
+    else
+    {
+        Html.RenderAction("Paging", "Base", new { @CurrentPageNo = @ViewBag.CurrentPageNo });
+    }
+}
+<script type="text/javascript">
+    $(function () {
+        $('.first').click(function () {
+            findPageNo();
+        });
+        $('.prev').click(function () {
+            findPageNo();
+        });
+        $('.next').click(function () {
+            findPageNo();
+        });
+        $('.last').click(function () {
+            findPageNo();
+        });
+
+        function findPageNo() {
+
+            debugger;
+            var res = $('.pagedisplay').val().split('/');
+            $("tr").each(function () {
+                var a_href = $(this).find('a.glyphicon.glyphicon-edit.edit_icon').attr('href');
+
+
+                if (typeof a_href != "undefined") {
+
+
+                    var hrefSplit = a_href.split('=');
+                    var newHref = hrefSplit[0] + '=' + res[0];
+                    $(this).find('a.glyphicon.glyphicon-edit.edit_icon').attr('href', newHref);
+                }
+            });
+        }
+    });
+
+
+</script>

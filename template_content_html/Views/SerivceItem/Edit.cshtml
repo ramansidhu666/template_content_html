@@ -1,0 +1,71 @@
+﻿@model Onlo.Models.ServiceItemModel
+@{
+    ViewBag.Title = "Service";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<script>
+    $(document).ready(function () {
+        $('.chosen-select').chosen({ no_results_text: 'Oops, nothing found!' });
+    })
+</script>
+
+<style type="text/css">
+    .fil {
+        border-style: solid;
+        border-width: 0 0 1px;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+<style type="text/css">
+    .listbox {
+        width: 100%;
+    }
+</style>
+
+@using (Html.BeginForm("Edit", "SerivceItem", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ServiceItemId)
+   @Html.HiddenFor(model=>model.CurrentPageNo)
+    
+    <h3 class="heading_b uk-margin-bottom">Service</h3>
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            <form id="form_validation" class="uk-form-stacked">
+                
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                            <label for="fullname">Service Name<span class="req">*</span></label>
+                            @Html.TextBoxFor(model => model.ServiceItemName, new { @class = "md-input" })
+                            @Html.ValidationMessageFor(model => model.ServiceItemName)
+                        </div>
+                    </div>
+                 
+                </div>
+                <div class="uk-grid">
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row">
+                            <label for="fullname">Parent</label>
+                            @Html.DropDownList("ParentId", (SelectList)ViewBag.ServicesList, "--Chooses Categories --", new { @style = "height:50px;width:670px", @class = "chosen-select " })
+                            @*@Html.ValidationMessageFor(model => model.Name)*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-1-1">
+                        <input type="submit" value="Submit" class="md-btn md-btn-primary" />
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<p class="operation">
+    <i class="fa fa-mail-reply create_icon"></i>
+    @Html.ActionLink(" Back to List", "Index")
+</p>

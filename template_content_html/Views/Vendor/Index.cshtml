@@ -1,0 +1,188 @@
+﻿@model  Onlo.Models.NewCustomerModel
+@{
+    ViewBag.Title = Model.UserTypeTitle;
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<h2 class="text-center">
+    @Model.UserTypeTitle
+</h2>
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        $('.chosen-select').chosen({ no_results_text: 'Oops, nothing found!' });
+        $('.md-icon material-icons').tooltip();
+        $('.sss').tooltip();
+
+    });
+</script>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+
+@using (Html.BeginForm())
+{
+    <div class="md-card">
+        <div class="md-card-content">
+            <div data-uk-grid-margin="" class="uk-grid">
+                <div class="uk-width-medium-2-10">
+                    <div style="margin-left:10px" class="">
+                        <label for="product_Company_name">
+                            Company Name
+                        </label>
+                        @Html.TextBox("CompanyName", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                    </div>
+
+                </div>
+                <div class="uk-width-medium-2-10">
+                    <div class="">
+                        <label for="product_search_Email">Email</label>
+                        @Html.TextBox("Email", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                    </div>
+
+                </div>
+                <div class="uk-width-medium-2-10">
+                    <div class="">
+                        <label for="product_search_Name">Name</label>
+                        @Html.TextBox("Name", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                    </div>
+
+                </div>
+              
+                <div class="uk-width-medium-4-10 uk-text-center">
+                    <input type="submit" value="Search" data-id="search" class="md-btn md-btn-primary uk-margin-small-top" />
+                    
+                </div>
+            </div>
+            <div data-uk-grid-margin="" class="uk-grid">
+               
+                    <div class="uk-width-medium-2-10">
+                        <div style="margin-left:10px" class="">
+                            <label for="product_Company_name">
+                                Choose User Type
+                            </label>
+                            @Html.DropDownListFor(m => m.RoleTypeId, Model.RoleTypes, "-- Choose User Type--", new { @style = "height:50px;width:500px", @class = "chosen-select" })
+
+                        </div>
+
+                    </div>
+               
+                
+              
+            </div>
+        </div>
+    </div>
+   
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="mytable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-1-10 uk-text-center"><span>Logo</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Company Name</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Full Name</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Email Address</span></th>
+                            <th class="uk-width-1-10 uk-text-center"><span>Status</span></th>
+                            @*<th class="uk-width-2-10 uk-text-center"><span>Actions</span></th>*@
+                            @*<th class="uk-width-1-10 uk-text-center"><span>Download</span></th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CustomerModelList)
+                        {
+
+
+                            <tr>
+                                <td class="uk-text-center">
+                                    @if ((@item.LogoPath != "") && (@item.LogoPath != null))
+                                    {
+                                        <img class="md-user-image" src="@Url.Content(item.LogoPath)" alt="" />
+                                        @*<img src="@Url.Content(item.LogoPath)" height="50" width="50" alt="No Image" />*@
+
+                                    }
+                                </td>
+
+                                <td class="">@item.CompanyName</td>
+                                <td class="">@item.FirstName</td>
+                                <td class="">@item.EmailID</td>
+                                <td class="uk-text-center">
+                                    @{var ids = "User" + item.UserId; }
+
+                                    @if (item.IsActive == true)
+                                    {
+                                        <a href="@Url.Action("UpdateUser", new { id = item.UserId })" title="Activated">
+                                            <img src="@Url.Content("~/assets/img/green2.jpg")" alt="Edit" height="30" width="20"  />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("UpdateUser", "Vendor", new { id = item.UserId })" title="Deactivate"><img src="@Url.Content("~/assets/img/red3.jpg")" height="30" width="20" alt="No Image" /></a>
+                                    }
+
+
+                                </td>
+
+                                @*<td class="uk-text-center">
+                                    
+                                    <a style="" href="#" data-toggle="tooltip" data-placement="top" data-original-title="Edit" class="glyphicon glyphicon-edit edit_icon" title="Edit"><img src="/assets/img/edit.png" class="edit" /></a>
+                                    <a href="@Url.Action("Details", "Vendor", new { id = item.UserId })" title="Details"><i class="md-icon material-icons">&#xE88F;</i></a>
+                                   
+                                </td>*@
+                               
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+}
+@{
+    if (Model.CustomerModelList.ToList().Count == 0)
+    {
+        TempData["Message"] = "No Record found !";
+    }
+    else
+    {
+        Html.RenderAction("Paging", "Base", new { @CurrentPageNo = @ViewBag.CurrentPageNo });
+    }
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('.first').click(function () {
+            findPageNo();
+        });
+        $('.prev').click(function () {
+            findPageNo();
+        });
+        $('.next').click(function () {
+            findPageNo();
+        });
+        $('.last').click(function () {
+            findPageNo();
+        });
+
+        function findPageNo() {
+
+            debugger;
+            var res = $('.pagedisplay').val().split('/');
+            $("tr").each(function () {
+                var a_href = $(this).find('a.glyphicon.glyphicon-edit.edit_icon').attr('href');
+
+
+                if (typeof a_href != "undefined") {
+
+
+                    var hrefSplit = a_href.split('=');
+                    var newHref = hrefSplit[0] + '=' + res[0];
+                    $(this).find('a.glyphicon.glyphicon-edit.edit_icon').attr('href', newHref);
+                }
+            });
+        }
+    });
+
+
+</script>

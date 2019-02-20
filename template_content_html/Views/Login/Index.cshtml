@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    HtmlHelper.ClientValidationEnabled = true;
+}
+<!-- Loading Container -->
+<div class="loading-container">
+    <div class="loader"></div>
+</div>
+<!--  /Loading Container -->
+<div class="login-container animated fadeInDown">
+    <div class="logobox">
+        <small>
+            <img alt="" src="assets/img/logo.png">
+        </small>
+    </div>
+    <div class="loginbox bg-white">
+        <div class="loginbox-title">SIGN IN</div>
+        <div class="loginbox-textbox">
+            <span class="input-icon icon-right">
+                <input id="email" required type="email" placeholder="Email Address" class="form-control">
+                <i class="fa fa-envelope circular blue"></i>
+            </span>
+        </div>
+        <div class="loginbox-textbox">
+            <span class="input-icon icon-right">
+                <input id="password" required type="password" placeholder="Password" class="form-control">
+                <i class="fa fa-lock circular darkorange"></i>
+            </span>
+        </div>
+        @*<div class="loginbox-forgot">
+            <a href="#">Forgot Password?</a>
+        </div>*@
+        <div class="loginbox-forgot">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" checked="checked" id="chkloggedin" class="colored-blue" style="opacity:0">
+                    <span class="text">Keep me logged in</span>
+                </label>
+            </div>
+        </div>
+        <div class="loginbox-submit">
+            <input id="btnLogin" type="submit" class="btn btn-danger btn-block" value="Log in">
+        </div>
+    </div>
+    
+</div>
+
+@section Scripts{
+    <script src="~/assets/js/jquery.cookie.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            if ($.cookie('EmailID') != "" && $.cookie('Password') != "") {
+                $('#email').val($.cookie('EmailID'));
+                $('#password').val($.cookie('Password'));
+                $('#chkloggedin').attr('checked', true);
+            }
+
+            $("#btnLogin").click(function () {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var loggedin = $("#chkloggedin:checked").val();
+                $('.loading-container').removeClass('loading-inactive');
+                if (email != "" && password != "") {
+                    $("#loginform").attr("action", "#");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Login/LoginMethod',
+                        data: JSON.stringify({ Email: email, Password: password, LoggedIn: loggedin }),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            if (result == "OK") {
+                                window.location.href = '@Url.Action("index", "Home")';
+                            }
+                            else {
+                                $('.loading-container').addClass('loading-inactive');
+                                Notify('Email id or Password is Wrong!', 'top-right', '5000', 'danger', 'fa-bolt', true);
+                                
+                                return false;
+                            }
+                        },
+                        error: function () {
+                            $('.loading-container').addClass('loading-inactive');
+                            Notify('Email id or Password is Wrong!', 'top-right', '5000', 'danger', 'fa-bolt', true);
+                            return false;
+                        }
+                    });
+                }
+                else {
+                    $("#loginform").attr("action", "#");
+                    $('.loading-container').addClass('loading-inactive');
+                    if ((email == "") && (password == ""))
+                    {
+                        Notify('Email id & Password is Wrong!', 'top-right', '5000', 'danger', 'fa-bolt', true);
+                        return false;
+                    }
+                    else if (email == "")
+                    {
+                        Notify('Email id is Wrong!', 'top-right', '5000', 'danger', 'fa-bolt', true);
+                        return false;
+                    }
+                    else if (password == "")
+                    {
+                        Notify('Password is Wrong!', 'top-right', '5000', 'danger', 'fa-bolt', true);
+                        return false;
+                    }
+                    
+                }
+            });
+
+            $('#email, #password').keypress(function (e) {
+                if (e.which == 13) {
+                    $("#btnLogin").click();
+                }
+            });
+        });
+    </script>
+}
+

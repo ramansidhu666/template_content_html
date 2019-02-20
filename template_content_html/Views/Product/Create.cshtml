@@ -1,0 +1,194 @@
+﻿@model HomeHelp.Models.ProductModel
+@{
+    ViewBag.Title = "Product";
+    if (Session["UserName"].ToString() == "Administrator")
+    {
+        Layout = "~/Views/Shared/_AdminLayoutDashboard.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.chosen-select').chosen({ no_results_text: 'Oops, nothing found!' });
+
+        $("#btncancel").click(function (event) {
+            debugger;
+            event.preventDefault();
+            var url = '@Url.Action("Index", "Product")';
+            window.location.href = url;
+        });
+
+
+    });
+    function readURL(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.blah')
+                    .attr('src', e.target.result)
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<style type="text/css">
+ 
+    .gallery .image-info .title {
+        margin: 0 0 10px;
+        line-height: 18px;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        float: left !important;
+        width: 80% !important;
+    }
+    .red {
+        color: red;
+    }
+
+    .font {
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+        background: #f59c1a !important;
+        border-color: #f59c1a !important;
+        width: 100% !important;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            cursor: inherit;
+            display: block;
+        }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<h2 class="page-header">Create Product</h2>
+			<!-- end page-header -->
+			<!-- begin profile-container -->
+    <div class="profile-container">
+        <!-- begin profile-section -->
+		<div class="col-md-7 col-sm-7">
+        <div class="profile-section">
+           
+            <div class="profile-left">
+                <!-- begin profile-image -->
+                <div class="profile-image">
+                    @{TempData["ImageUrl"] = ViewBag.ImageUrl;}
+                    @if ((ViewBag.ImageUrl != "") && (ViewBag.ImageUrl != null))
+                    {
+                        <img class="blah" src="@Url.Content(ViewBag.ImageUrl)" alt="" style="height:100%;width:100%" />
+
+                    }
+                    else
+                    {
+                        <img class="blah" src="~/assets/img/download.jpg" style="height:100%;width:100%" />
+                    }
+                  
+                    <i class="fa fa-user hide"></i>
+                </div>
+                <!-- end profile-image -->
+                <div class="m-b-10">
+
+                    <span class="btn btn-default btn-file">
+                        Upload Picture <input type='file' onchange="readURL(this);" name="file" id="file" accept="image/*" />
+                    </span>
+
+                </div>
+
+            </div>
+            <!-- end profile-left -->
+            <!-- begin profile-right -->
+            <div class="profile-right">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="">
+                        <div class="m-t-10">
+                            <div class="field">Product Name<span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.ProductName, new { @class = "form-control" })</div>
+                            <div class="font red">@Html.ValidationMessageFor(model => model.ProductName)</div>
+                        </div>
+
+                        <div class="m-t-10 row" style="    margin-bottom: -5%;">
+                            <div class="col-md-1">Size</div>
+                            <div class="col-md-9">
+                                @foreach (var names in @ViewBag.ProductList)
+                                {
+                                    var checkBoxId = "chk" + names.SizeId;
+
+                                    <div class="">
+                                        <label>
+                                            <input type="checkbox" id="@checkBoxId" class="chkclass" value="@names.SizeId" name="Size" />
+                                            @names.Name
+                                        </label>
+                                    </div>
+
+
+                                }
+                            </div>
+                            <div class="col-md-2"></div>
+
+
+                        </div>
+
+                        <div class="font red m-t-10">@Html.ValidationMessageFor(model => model.Size)</div>
+                        <div class="m-t-10">
+                            <div class="field">Price<span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.Price, new { @class = "form-control" })</div>
+                            <div class="font red">@Html.ValidationMessageFor(model => model.Price)</div>
+                        </div>
+                        <div>
+                            <div class="field"></div>
+                            <div class="m-t-60">
+                                <button type="submit" class="btn btn-success m-r-5 m-b-5">Save</button>
+                                <input type="button" value="Cancel" class="btn btn-danger m-r-5 m-b-5" onclick="location.href='@Url.Action("Index", "Product")'" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end table -->
+                </div>
+                <!-- end profile-info -->
+            </div>
+				</div>
+               
+        </div>
+        <!-- end profile-section -->
+
+    </div>
+			<!-- end profile-container -->
+
+}
+
+<ul class="pager">
+    <li class="previous"><a href="@Url.Action("Index") ">← Back to List</a></li>
+</ul>
+
+

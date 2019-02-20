@@ -1,0 +1,139 @@
+﻿@model IEnumerable<HomeHelp.Models.CategoryModel>
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+
+        $('.glyphicon glyphicon-edit edit_icon').tooltip();
+
+        $("#btncancel").click(function (event) {
+
+            event.preventDefault();
+            var url = '@Url.Action("Index", "Category")';
+            window.location.href = url;
+        });
+
+    });
+</script>
+
+<style type="text/css">
+    .material-icons1 {
+        color: rgba(0, 0, 0, 0.54);
+        display: inline-block;
+        font-family: "Material Icons";
+        font-feature-settings: "liga";
+        font-size: 31px;
+        font-style: normal;
+        font-weight: 400;
+        height: 1em;
+        letter-spacing: normal;
+        line-height: 1;
+        text-rendering: optimizelegibility;
+        text-transform: none;
+        vertical-align: -4px;
+        width: 1em;
+    }
+    .gallery .image-info .desc {
+        line-height: 16px;
+        font-size: 12px;
+        
+        overflow: hidden;
+        margin-top: 10px;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+
+@*@using (Html.BeginForm())
+    {
+        <div class="md-card">
+            <div class="md-card-content">
+                <div data-uk-grid-margin="" class="uk-grid">
+                    <div class="uk-width-medium-3-10">
+                        <div style="margin-left:10px" class="">
+                            <label for="product_Company_name">
+                                Category Name
+                            </label>
+                            @Html.TextBox("Name", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="uk-width-medium-2-10 uk-text-center">
+                        <input type="submit" value="Search" data-id="search" class="md-btn md-btn-primary uk-margin-small-top" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }*@
+<!-- begin breadcrumb -->
+<!-- begin page-header -->
+<h2 class="page-header">Categories</h2>
+<a href="../Category/Create">Add new category</a>
+<!-- end page-header -->
+
+
+<div id="gallery" class="gallery">
+    @foreach (var item in Model)
+    {
+        <div class="image gallery-group-1">
+            <div class="image-inner">
+                <a href="~/assets/img/gallery/gallery-1.jpg" data-lightbox="gallery-group-1">
+
+                    @if ((@item.PhotoPath != "") && (@item.PhotoPath != null))
+                    {
+                        <img src="@Url.Content(item.PhotoPath)" alt="" />
+
+
+                    }
+                    else
+                    {
+                        <img src="~/assets/img/download.jpg" />
+                    }
+                </a>
+                @*<p class="image-caption">
+                        #1382 - 3D Arch
+                    </p>*@
+            </div>
+            <div class="image-info">
+                <h5 class="title">@item.Name</h5>
+                <a class="btn btn-default btn-icon btn-circle btn-lg" href="@Url.Action("Edit", "Category", new { id = item.CategoryId, CurrentPageNo = @ViewBag.CurrentPageNo })"><i class=" fa fa-expand"></i></a>
+                <a class="btn btn-danger btn-icon btn-circle btn-lg" href="@Url.Action("Delete", "Category", new { id = item.CategoryId })"><i class="fa fa-times"></i></a>
+
+                @*<div class="pull-right">
+                        <small>by</small> <a href="javascript:;">Sean Ngu</a>
+                    </div>*@
+                @*<div class="rating">
+                        <span class="star active"></span>
+                        <span class="star active"></span>
+                        <span class="star active"></span>
+                        <span class="star"></span>
+                        <span class="star"></span>
+                    </div>*@
+                <div class="desc">
+                    @item.Colour
+                </div>
+            </div>
+        </div>
+
+    }
+
+</div>
+
+@{
+    if (Model.ToList().Count == 0)
+    {
+
+        TempData["Message"] = "No Record found !";
+    }
+
+}
+

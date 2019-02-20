@@ -1,0 +1,217 @@
+﻿@model HomeHelp.Models.RequestModel
+@{
+    ViewBag.Title = "Agencies";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div style="margin-top:2%">
+    @{
+        Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+    }
+</div>
+@using (Html.BeginForm())
+{
+
+    <h2 class="page-header">Request Detail</h2>
+    <div class="profile-container">
+        <!-- begin profile-section -->
+        <div class="profile-section">
+            <!-- begin profile-right -->
+            <div class="">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="table-responsive">
+                        <table class="table table-profile">
+                            <thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="field">First Name</td>
+                                    <td><a href="#">@Model.FirstName</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Last Name</td>
+                                    <td><a href="#"> @Model.LastName</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Address</td>
+                                    <td><i class="fa fa-map-marker text-danger fa-fw"></i>@Model.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">EmailId</td>
+                                    <td><a href="#">@Model.EmailId</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Phone No</td>
+                                    <td><i class="fa fa-mobile fa-lg m-r-5"></i> @Model.MobileNumber</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Description</td>
+                                    <td><a href="#">@Model.Description</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field"></td>
+                                    <td><input id="reject_btn" type="button" value="Reject" class="btn btn-success" style="float:right" data-bind="@Model.JobRequestId" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- end table -->
+                </div>
+                <!-- end profile-info -->
+            </div>
+            <!-- end profile-right -->
+            @if (@Model.CustomerIdTo == new Guid())
+            {
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-profile">
+                            <thead>
+                                @if (Model.agencyIndividualModel.Count > 0)
+                                {
+
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Work Rate</th>
+                                        <th>Address</th>
+                                        <th>Contact Number</th>
+                                        <th></th>
+                                    </tr>
+                                }
+                            <tbody>
+                                @{ var odd = true; }
+                                @if (Model.agencyIndividualModel.Count > 0)
+                                {
+
+                                    foreach (var item in Model.agencyIndividualModel)
+                                    {
+                                <tr class="@(odd ? "left" : "right")">
+                                    <td>@item.FullName</td>
+                                    <td>@item.EmailId</td>
+                                    <td>@item.WorkRate</td>
+                                    <td>@item.Address</td>
+                                    <td>@item.ContactNumber</td>
+                                    <td><input type="radio" name="radio_assign" value="@item.AgencyIndividualId" /></td>
+                                </tr>
+                                        odd = !odd;
+                                    }
+                                }
+                                else
+                                {
+                                <tr><td><span>No service provider available for this job.</span></td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @if (Model.agencyIndividualModel.Count != 0)
+                    {
+                        <input id="assign_btn" type="button" value="Assign" class="btn btn-success" style="float:right" />
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="row">This is already assigned.</div>
+            }
+
+        </div>
+    </div>
+    <!-- begin profile-right -->
+}
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        $("#assign_btn").click(function ()
+        {
+            $('#assign_btn').button('loading');
+            var id=$('input[name=radio_assign]:checked').val();
+            if (id == undefined) {
+                $('#assign_btn').button('reset');
+                swal("", "Please select your choice", "error")
+
+            }
+            else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Agency/AssignRequest',
+                    data: JSON.stringify({ assignedId: id,jobRequestId:@Model.JobRequestId}),
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result == false) {
+                            $('#assign_btn').button('reset');
+                            swal("Sorry", "Something went wrong.Please try again.", "error")
+                        }
+                        else{
+                            swal({
+                                title: "Success?",
+                                text: "Assigned successfully",
+                                type: "success",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Ok",
+                                closeOnConfirm: false,
+                            },
+                            function(isConfirm) {
+                                if (isConfirm) {
+                                    $('#assign_btn').button('reset');
+                                    window.location.href="/Agency/Index"
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        $('#assign_btn').button('reset');
+                        swal("Sorry", "Something went wrong.Please try again.", "error")
+
+                    }
+                });
+            }
+        });
+        $("#reject_btn").click(function ()
+        {
+            $('#reject_btn').button('loading');
+            var input = $(this);
+            var data=null;
+            if ($(input).data().bind) {
+                data=$(input).data().bind;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/Agency/RejectRequest',
+                data: JSON.stringify({jobRequestId:data}),
+                contentType: 'application/json',
+                success: function (result) {
+                    if (result == false) {
+                        $('#reject_btn').button('reset');
+                        swal("Sorry", "Something went wrong.Please try again.", "error")
+                    }
+                    else{
+                        swal({
+                            title: "Success",
+                            text: "Request rejected successfully.",
+                            type: "success",
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Ok",
+                            closeOnConfirm: false,
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                $('#reject_btn').button('reset');
+                                window.location.href="/Agency/NewRequest"
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    $('#reject_btn').button('reset');
+                    swal("Sorry", "Something went wrong.Please try again.", "error")
+
+                }
+            });
+
+        })
+    });
+</script>

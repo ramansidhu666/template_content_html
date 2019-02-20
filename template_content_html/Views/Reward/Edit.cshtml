@@ -1,0 +1,174 @@
+﻿@model HomeHelp.Models.RewardModel
+@{
+    ViewBag.Title = "Reward";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style type="text/css">
+    .fil {
+        border-style: solid;
+        border-width: 0 0 1px;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+<style type="text/css">
+    .listbox {
+        width: 100%;
+    }
+
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+        background: #f59c1a !important;
+        border-color: #f59c1a !important;
+        width: 100% !important;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            cursor: inherit;
+            display: block;
+        }
+    .red {
+        color: red;
+    }
+
+    .font {
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+
+
+        $("#btncancel").click(function (event) {
+            debugger;
+            event.preventDefault();
+            var url = '@Url.Action("Index", "Reward")';
+            window.location.href = url;
+        });
+
+    });
+    function readURL(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.blah')
+                    .attr('src', e.target.result)
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@using (Html.BeginForm("Edit", "Reward", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.RewardId)
+    @*@Html.HiddenFor(model => model.CurrentPageNo)*@
+    <h2 class="page-header">Edit Category</h2>
+
+			<!-- begin profile-container -->
+    <div class="profile-container">
+        <!-- begin profile-section -->
+		<div class="col-md-7 col-sm-7">
+        <div class="profile-section">
+            <!-- begin profile-left -->
+            <div class="profile-left">
+                <!-- begin profile-image -->
+                <div class="profile-image">
+                    @if ((Model.ImagePath != "") && (Model.ImagePath != null))
+                    {
+                        <img class="blah md-user-image" src="@Url.Content(Model.ImagePath)" alt="" style="height:100%;width:100%" />
+
+                    }
+                    else
+                    {
+                        <img class="blah md-user-image" src="~/assets/img/download.jpg" style="height:100%;width:100%" />
+                    }
+                    @*<img src="~/assets/img/profile-cover.jpg" />*@
+                    <i class="fa fa-user hide"></i>
+                </div>
+                <!-- end profile-image -->
+                <div class="m-b-10">
+
+                    <span class="btn btn-default btn-file">
+                        Change Picture <input type='file' onchange="readURL(this);" name="file" id="file" accept="image/*" />
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- end profile-left -->
+            <!-- begin profile-right -->
+            <div class="profile-right">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="">
+                       <div class="m-t-10">
+                           <div class="field font">Title<span>*</span></div>
+                                    <div>@Html.TextBoxFor(model => model.Title, new { @class = "form-control" })</div>
+                                    <div class="red">@Html.ValidationMessageFor(model => model.Title)</div>
+                               </div>
+
+                                <div class="m-t-10">
+                                    <div class="field font">Description<span>*</span></div>
+
+                                    <div>@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 10 })</div>
+                                    <div class ="red">@Html.ValidationMessageFor(model => model.Description)</div>
+                                </div>
+                        <div class="m-t-10">
+                            <div class="field font">Number of Smileys<span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.Smileys, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(model => model.Smileys)</div>
+                        </div>
+                               
+                                <div>
+                                    <div class="field"></div>
+                                    <div class="m-t-10">
+                                        <button type="submit" class="btn btn-success m-r-5 m-b-5">Update</button>
+                                        <input type="button" value="Cancel" class="btn btn-danger m-r-5 m-b-5" onclick="location.href='@Url.Action("Index", "Category")'" />
+                                    </div>
+                                </div>
+
+                    </div>
+                    <!-- end table -->
+                </div>
+                <!-- end profile-info -->
+            </div>
+            <!-- end profile-right -->
+        </div>
+		  </div>
+        <!-- end profile-section -->
+
+    </div>
+			<!-- end profile-container -->
+
+    
+}
+@*<p class="operation">
+    <i class="fa fa-mail-reply create_icon"></i>
+    @Html.ActionLink(" Back to List", "Index")
+</p>*@
+
+
+<ul class="pager">
+    <li class="previous"><a href="@Url.Action("Index") ">← Back to List</a></li>
+</ul>

@@ -1,0 +1,229 @@
+﻿@model HomeHelp.Models.JObRequestResponseModel
+@{
+    ViewBag.Title = "User Detail";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+@using (Html.BeginForm("Details", "Location", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    @Html.HiddenFor(model => model.CustomerId)
+
+
+    <!-- begin page-header -->
+    <h1 class="page-header">Location Details</h1>
+    <!-- end page-header -->
+    <!-- begin profile-container -->
+    <div class="profile-container">
+        <!-- begin profile-section -->
+        <div class="profile-section">
+
+            <!-- begin profile-right -->
+            <div class="profile-right">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="table-responsive">
+                        <table class="table table-profile">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>
+                                        <h2 style=" float: left;">@Model.Title</h2>
+                                        <div style=" margin-top: 2%; margin-left: 75%; ">
+                                            @if (!Model.IsApproved && Model.Status != "New")
+                                            {
+                                                <input type="button" value="Approve" style="padding: 5px 22px 7px 22px;" class="btn btn-success m-r-5 m-b-5" onclick="location.href='@Url.Action("ApproveEvents", "Location", new { id = Model.LocationId })'" />
+                                            }
+                                            else if (Model.Status == "New")
+                                            {
+                                                <input type="button" value="Approve" style="padding: 5px 22px 7px 22px;" class="btn btn-success m-r-5 m-b-5" onclick="location.href='@Url.Action("ApproveEvents", "Location", new { id = Model.LocationId })'" />
+                                                <input type="button" id="btnDisapprove" value="Disapprove" class="btn btn-danger m-r-5 m-b-5" />
+                                            }
+                                            else
+                                            {
+                                                <input type="button" id="btnDisapprove" value="Disapprove" class="btn btn-danger m-r-5 m-b-5" />
+                                            }
+
+
+                                        </div>
+
+                                    </th>
+                                    <th style="width: 20%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight">
+                                    <td class="field"></td>
+                                    <td><span style="font-size: large; color: #00acac">Location Details</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="field">Description</td>
+                                    <td> @Model.Description</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Address</td>
+                                    <td><i class="fa fa-map-marker text-danger fa-fw"></i>@Model.Street,  @Model.City, @Model.State, @Model.Country</td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="field">Rating</td>
+                                    <td>@Model.Ratings</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="field">Status</td>
+                                    <td>
+                                        @Model.Status
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Categories</td>
+                                    <td>@Model.CategoryNames</td>
+                                </tr>
+
+                                <tr class="highlight">
+                                    <td class="field"></td>
+                                    <td><span style="font-size: large; color: #00acac">Details of person who added this location.</span></td>
+                                </tr>
+                                <tr class="divider">
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Name</td>
+                                    <td>@Model.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Mobile</td>
+                                    <td><i class="fa fa-mobile fa-lg m-r-5"></i> @Model.MobileNo</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Email Id</td>
+                                    <td>@Model.EmailId</td>
+                                </tr>
+                                @*<tr class="highlight">
+                                        <td class="field"></td>
+                                        <td><span style="font-size:large; color:#00acac">Details of person who purchased this location.</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Name</td>
+                                        <td><a href="#">@Model.Name</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Mobile</td>
+                                        <td><i class="fa fa-mobile fa-lg m-r-5"></i> @Model.MobileNo</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">EmailId</td>
+                                        <td><a href="#">@Model.EmailId</a></td>
+                                    </tr>*@
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- end table -->
+                </div>
+                <!-- end profile-info -->
+            </div>
+            <!-- end profile-right -->
+        </div>
+        <!-- end profile-section -->
+        <!-- begin profile-section -->
+        <div class="profile-section">
+            <!-- begin superbox -->
+            <h3 style="text-align: center;"><span style=" color:#00acac">LOCATION IMAGES</span></h3>
+            <div class="superbox" data-offset="54">
+                @if (Model.LocationImages.Count() > 0)
+                {
+                    foreach (var item in Model.LocationImages)
+                    {
+                        <div class="superbox-list" style="margin-right: 1%;">
+                            <img src="@Url.Content(item)" alt="" data-img="@Url.Content(item)" class="superbox-img" />
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="superbox-list">
+                        <img src="~/assets/img/download.jpg" alt="" class="superbox-img" />
+
+                    </div>
+                }
+
+
+            </div>
+            <!-- end superbox -->
+        </div>
+        <!-- end profile-section -->
+
+    </div>
+    <!-- end profile-container -->
+
+    <a href="#modal-dialog" id="md_btn" class="btn btn-sm btn-success" style="display:none" data-toggle="modal">Demo</a>
+    <div class="modal fade reason" id="modal-dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    @*<h4 class="modal-title">Modal Dialog</h4>*@
+                </div>
+                <div class="modal-body">
+                    <div style="width: 50%; float: left; margin-top: 1%; ">   Reason to disapprove <label id="error" style="color: red;"></label></div>
+                    @Html.TextBoxFor(model => model.ReasonToDisapprove, new { @class = "form-control add_notes", style = "width:50%" })
+                </div>
+                <div class="modal-footer">
+                    <input type="button" data-id="@Model.LocationId" data-dismiss="modal" class="add_category btn btn-success m-r-5 m-b-5" id="btnAddCategory" value="Ok" />
+                    @*<a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Close</a>*@
+                    @*<a href="javascript:;" class="btn btn-sm btn-success" data-dismiss="modal" onclick="location.href='@Url.Action("DisapproveEvents", "Location", new { id = Model.LocationId, ReasonToDisapprove = Model.ReasonToDisapprove })'">Ok</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<ul class="pager">
+    <li class="previous"><a href="@Url.Action("Index") ">← Back to List</a></li>
+</ul>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnDisapprove").click(function () {
+            debugger;
+            $("#md_btn").click();
+            return false;
+        });
+
+        $(".add_category").click(function () {
+            //debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            debugger;
+            var notes = $('input.add_notes[type="text"]').val();
+            if (notes == "") {
+                $('#error').html("Please enter the reason.");
+                return false;
+            }
+
+            $.ajax({
+
+                url: "/Location/DisapproveEvents",
+                data: { 'Id': id, 'ReasonToDisapprove': notes },
+                type: "POST",
+
+                success: function (data) {
+                    debugger;
+                    //alert(data.responseText);
+                    $('.uk-close').click();
+                    window.location.href = "/Location/Index";
+                },
+                error: function () {
+                    debugger;
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+    });
+
+</script>

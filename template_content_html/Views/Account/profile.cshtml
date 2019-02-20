@@ -1,0 +1,112 @@
+﻿@model BrandBudz.Models.ClientModel
+
+@{
+    ViewBag.Title = "Client";
+    //Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<h2 class="text-center">Client</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LogoPath)
+        </dt>
+        <dd>
+            @{
+                if ((Model.LogoPath != "")&& (Model.LogoPath != null))
+                {
+                    <img src="@Url.Content(Model.LogoPath)" height="50" width="150" alt="No Logo" />
+                }
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientAddress)
+        </dd>
+        
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TagLine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TagLine)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailID)
+        </dd>
+
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+       
+        <dt>
+            @Html.DisplayNameFor(model=>model.PhoneNo)
+
+        </dt>
+        <dd>
+            @Html.DisplayFor(model=>model.PhoneNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifyDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifyDate)
+        </dd>
+
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+    </dl>
+</div>
+<p class="operation">
+    @*@if (Convert.ToBoolean(TempData["View"]) == true)
+    {*@
+        <i class="fa fa-mail-reply create_icon"></i>
+        @Html.ActionLink(" Back to List", "Index")
+        <b>|</b>
+    @*}*@
+    @*@if (Convert.ToBoolean(TempData["Edit"]) == true)
+    {*@
+        @Html.ActionLink(" ", "Edit", new { id = Model.ClientID }, new { @class = "glyphicon glyphicon-edit edit_icon", @data_original_title = "Edit", @data_placement = "top", @data_toggle = "tooltip" })
+    @*}*@
+</p>

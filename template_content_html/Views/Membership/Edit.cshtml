@@ -1,0 +1,102 @@
+﻿@model HomeHelp.Models.MembershipModel
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<style type="text/css">
+    .fil {
+        border-style: solid;
+        border-width: 0 0 1px;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+<style type="text/css">
+    .red {
+        color: red;
+    }
+
+    .font {
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+
+
+        $("#btncancel").click(function (event) {
+            debugger;
+            event.preventDefault();
+            var url = '@Url.Action("Index", "Membership")';
+            window.location.href = url;
+        });
+
+    });
+</script>
+@using (Html.BeginForm("Edit", "Membership", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.MembershipId)
+    @*@Html.HiddenFor(model => model.ParentId);*@
+    @Html.HiddenFor(model => model.CurrentPageNo)
+    <h2 class="page-header">Edit Category</h2>
+
+			    <div class="profile-container">
+        <!-- begin profile-section -->
+        <div class="col-md-7 col-sm-7">
+            <div class="profile-section">
+
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="">
+                        <div class="m-t-10">
+                            <div class="field font">Name <span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.Name, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Name)</div>
+                        </div>
+
+                        <div class="m-t-10">
+                            <div class="field font">Cost<span>*</span></div>
+
+                            <div>@Html.TextBoxFor(model => model.Cost, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Cost)</div>
+                        </div>
+                        <div class="m-t-10">
+                            <div class="field font">Number of smileys <span>*</span></div>
+                            <div>@Html.TextBoxFor(model => model.Smileys, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Smileys)</div>
+                        </div>
+
+                        <div class="m-t-10">
+                            <div class="field font">Hangouts per day<span>*</span></div>
+
+                            <div>@Html.TextBoxFor(model => model.Hangouts, new { @class = "form-control" })</div>
+                            <div class="red">@Html.ValidationMessageFor(Model => Model.Hangouts)</div>
+                        </div>
+                        <div>
+                            <div class="field"></div>
+                            <div class="m-t-10">
+                                <button type="submit" class="btn btn-success m-r-5 m-b-5">Update</button>
+                                <input type="button" value="Cancel" class="btn btn-danger m-r-5 m-b-5" onclick="location.href='@Url.Action("Index", "Membership")'" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end table -->
+                </div>
+            </div>
+
+        </div>
+        <!-- end profile-section -->
+
+    </div>
+
+}
+
+<ul class="pager">
+    <li class="previous"><a href="@Url.Action("Index") ">← Back to List</a></li>
+</ul>

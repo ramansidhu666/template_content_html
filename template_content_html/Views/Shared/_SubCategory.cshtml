@@ -1,0 +1,144 @@
+﻿@model Friendlier.Models.ProductType
+
+<div>
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            <form id="form_validation" class="uk-form-stacked">
+                <div class="uk-grid">
+                    <div id="drp" style="width: 99%;float: left;">
+                        <div class="" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                            <div>
+                                <div class="md-card subcat_new">
+                                    <div style="display:none">@ViewBag.UserId</div>
+                                    <div class="md-card-content">
+                                        <ul class="md-list md-list-addon md-list-interactive subcat" id="product">
+                                            @foreach (var item in Model.CategoryData)
+                                            {
+                                                if (@item.countChild > 0)
+                                                {
+                                                    <li class="anchorSubDetail" data-id="@item.CategoryId">
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons ">&#xE037;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">@item.Name</span>
+                                                        </div>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li data-id="@item.CategoryId">
+                                                        <div class="uk-form-row" style="float:left;">
+                                                            <input id="notes" style=" height: 1px !important; margin-top: 3px !important;" type="text" class="md-input add_notes" placeholder="Notes" />
+                                                        </div>
+                                                        <div class="md-list-addon-element add_button" style="float:left;">
+
+                                                            <input type="button" data-id="@item.CategoryId" class="add_category md-btn md-btn-warning" id="btnAddCategory" value="Add" />
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">@item.Name</span>
+                                                        </div>
+
+                                                    </li>
+                                                }
+                                            }
+
+                                        </ul>
+                                        <ul class="md-list md-list-addon md-list-interactive subcat" id="service">
+                                            @foreach (var item in Model.ServiceItemData)
+                                            {
+                                                if (@item.countChildService > 0)
+                                                {
+                                                    <li class="anchorSubDetail" data-id="@item.ServiceItemId">
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons ">&#xE037;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">@item.ServiceItemName</span>
+                                                        </div>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li data-id="@item.ServiceItemId">
+                                                        <div class="uk-form-row" style="float:left;">
+                                                            <input id="notes" style=" height: 1px !important; margin-top: 3px !important;" type="text" class="md-input add_notes" placeholder="Notes" />
+                                                        </div>
+                                                        <div class="md-list-addon-element add_button" style="float:left;">
+                                                            <input type="button" data-id="@item.ServiceItemId" class="add_category md-btn md-btn-warning" id="btnAddCategory" value="Add" />
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">@item.ServiceItemName</span>
+
+                                                        </div>
+                                                    </li>
+                                                }
+
+                                            }
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".anchorSubDetail").click(function () {
+            //debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var selected = $("#productType input[type='radio']:checked").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/User/SubCategories?Id=" + id + "&UserId=" + @ViewBag.UserId +"&productType=" + selected,
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    //debugger;
+                    $('#myModalContent').html(data);
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        $(".add_category").click(function () {
+            //debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var selected = $("#productType input[type='radio']:checked").val();
+            debugger;
+            var notes = $('input.add_notes[type="text"]').val();
+         
+            $.ajax({
+                type: "GET",
+                url: "/User/SaveProducts?Id=" + id + "&UserId=" + @ViewBag.UserId +"&productType=" + selected + "&notes=" + notes,
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                   // debugger;
+                    alert(data.responseText);
+                    $('.uk-close').click();
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+    });
+
+</script>

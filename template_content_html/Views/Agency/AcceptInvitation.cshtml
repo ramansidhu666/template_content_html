@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Invitation";
+    Layout = null;
+}
+<link href="~/assets/plugins/sweetalert-master/dist/sweetalert.css" rel="stylesheet" />
+<!-- end row -->
+<div class="row">
+
+</div>
+<script src="~/assets/plugins/jquery/jquery-1.9.1.min.js"></script>
+<script src="~/assets/plugins/sweetalert-master/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        if (@TempData["ShowMessage"].ToString().ToLower()==true)
+        {
+            swal({
+                title: "Success",
+                text: "Invitation accepted.",
+                type: "success",
+                //showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Ok",
+                //cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                //closeOnCancel: false
+            },
+                       function(isConfirm) {
+                           if (isConfirm) {
+                               window.close();
+                           }
+                       });
+            //swal("Success", "Email sent to the assign service provider.", "success")
+        }
+        else{
+            swal({
+                title: "Error",
+                text: "Link Expires.",
+                type: "error",
+                //showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Ok",
+                //cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                //closeOnCancel: false
+            },
+                  function(isConfirm) {
+                      if (isConfirm) {
+                          window.close();
+                      }
+                  });
+            //swal("Success", "Email sent to the assign service provider.", "success")
+        }
+
+    });
+</script>

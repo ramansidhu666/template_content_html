@@ -1,0 +1,101 @@
+﻿@model HomeHelp.Models.UserModel
+@{
+    ViewBag.Title = "UserDetail";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<h2>UserDetail</h2>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+<div class="row">
+
+    <div class="col-md-6 col-sm-6">
+
+        <figure class="product-view-image">
+            <!-- product image -->
+            @if ((@Model.PropertyImage != "") && (@Model.PropertyImage != null))
+            {
+                <img id="imgprvw" class="img-responsive" src="@Model.PropertyImage" data-propertyimageid="-1" width="620" height="620" alt="" />
+            }
+           
+        </figure>
+
+    </div>
+
+    <div class="col-md-6 col-sm-6">
+
+        <h1 class="product-view-title">@Model.PropertyType</h1>
+
+        <p>
+
+            <h2>@Model.MLS</h2>
+        </p>
+
+        <hr class="half-margins" />
+
+        <span id="product-view-stock-info" class="shop-stock-info stock-yes">
+
+            <label>Approve :</label>
+            <p>
+
+            </p>
+
+        </span><!-- /stock -->
+        <!-- see the bottom of the page for the script -->
+        <section class="product-view-colors">
+            @{
+                if (Model.PropertyPhotolist != null)
+                {
+                    foreach (var item in Model.PropertyPhotolist)
+                    {
+                        <div class="Property_img">
+
+                            <div id="DivId-@item.PropertyImageId">
+                                <a data-color="pink" data-stock="yes" data-id="@item.PropertyImageId" class="imageclass" data-src="@item.imagelist" href="#">
+                                    <img src="@item.imagelist" height="70" alt="" />
+
+                                </a>
+                            </div>                            
+                            <div id="DivIconId-@item.PropertyImageId" class="edit_in" data-toggle="modal" onclick="DeleteProperty(@item.PropertyImageId);" href="#DeleteModal">
+
+                                <i class="fa fa-times"></i> <a href="#"></a>
+
+                            </div>
+                        </div>
+                    }
+
+                }
+            }
+
+
+
+        </section>
+
+        <form action="#" method="get" class="form-inline margin-top30 nopadding clearfix">
+            <div class="remarks_scttt">
+                <span>Remarks:</span>
+                <textarea class="text_in" id="RemarksDiv" type="text" value="Mickey" style="width: 300px;" />@Model.Remark</textarea>
+                @*<input class="btn-group pull-left product-opt-size" type="text" id="myText" value="@Model.Remark">*@
+                <p class="new_text"> </p>
+                <!-- /btn-group -->
+
+            </div>
+
+
+        </form>
+
+        <div>
+            <button id="RemarksBtn" data-toggle="modal" href="#RemarkModal" onclick="UpdateRemarks(@Model.PropertyId);" class=" bigButton action">Update Remarks</button>
+        </div>
+        <hr class="half-margins" />
+
+
+
+    </div>
+
+
+
+</div>
+

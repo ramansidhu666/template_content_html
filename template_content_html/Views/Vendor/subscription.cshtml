@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Onlo.Models.CustomerModel>
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+<style type="text/css">
+    .material-icons1 {
+        color: rgba(0, 0, 0, 0.54);
+        display: inline-block;
+        font-family: "Material Icons";
+        font-feature-settings: "liga";
+        font-size: 31px;
+        font-style: normal;
+        font-weight: 400;
+        height: 1em;
+        letter-spacing: normal;
+        line-height: 1;
+        text-rendering: optimizelegibility;
+        text-transform: none;
+        vertical-align: -4px;
+        width: 1em;
+    }
+</style>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+<p class="operation">
+    @*@if (Convert.ToBoolean(TempData["Create"]) == true)
+        {*@
+    <i class="glyphicon glyphicon-share-alt create_icon"></i>
+    @Html.ActionLink("Create New", "Create")
+    @*}*@
+</p>
+
+@using (Html.BeginForm())
+{
+    <div class="md-card-content">
+        <div data-uk-grid-margin="" class="uk-grid">
+            <div class="uk-width-medium-3-10">
+                <div class="md-input-wrapper">
+                    <label for="product_Company_name">
+                        Company Name
+                    </label>
+                    @Html.TextBox("CompanyName", null, new { @class = "md-input" })<span class="md-input-bar"></span>
+                </div>
+
+            </div>
+            <div class="uk-width-medium-3-10">
+                <div class="md-input-wrapper"><label for="product_search_Email">Email</label>@Html.TextBox("Email", null, new { @class = "md-input" })<span class="md-input-bar"></span></div>
+
+            </div>
+            <div class="uk-width-medium-1-10">
+                <div class="md-input-wrapper"><label for="product_search_Name">Name</label>@Html.TextBox("Name", null, new { @class = "md-input" })<span class="md-input-bar"></span></div>
+
+            </div>
+            @*<div class="uk-width-medium-3-10">
+                    <div class="uk-margin-small-top">
+                        <select data-md-selectize-bottom="" multiple="multiple" data-md-selectize="" id="product_search_status" tabindex="-1" style="display: none;" class="selectized"></select><div class="selectize-control multi"><div class="selectize-input items not-full has-options"><input type="text" autocomplete="off" tabindex="" placeholder="Status" style="width: 40px;"></div></div><div class="selectize_fix"></div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-10">
+                    <div class="uk-margin-top uk-text-nowrap">
+                        <div class="icheckbox_md"><input type="checkbox" data-md-icheck="" id="product_search_active" name="product_search_active" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                        <label class="inline-label" for="product_search_active">Active</label>
+                    </div>
+                </div>*@
+            <div class="uk-width-medium-2-10 uk-text-center">
+                <input type="submit" value="Search" data-id="search" class="md-btn md-btn-primary uk-margin-small-top" />
+                @*<a class="md-btn md-btn-primary uk-margin-small-top" href="#">Filter</a>*@
+            </div>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="mytable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-1-10 uk-text-center"><span>Logo</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Company Name</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Full Name</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Email Address</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>SubscriptionStartDate</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>SubscriptionEndDate</span></th>
+                            <th class="uk-width-1-10 uk-text-center"><span>Status</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Actions</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Download</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <tr>
+                                <td class="uk-text-center">
+                                    @if ((@item.LogoPath != "") && (@item.LogoPath != null))
+                                    {
+                                        <img class="md-user-image" src="@Url.Content(item.LogoPath)" alt="" />
+                                        @*<img src="@Url.Content(item.LogoPath)" height="50" width="50" alt="No Image" />*@
+
+                                    }
+                                </td>
+
+                                <td class="uk-text-center">@item.CompanyName</td>
+                                <td class="uk-text-center">@item.FirstName</td>
+                                <td class="uk-text-center">@item.EmailID</td>
+                                <td class="uk-text-center">@item.SubscriptionStartDate</td>
+                                <td class="uk-text-center">@item.SubscriptionEndDate</td>
+                               
+                                <td class="uk-text-center">
+                                    @{var ids = "User" + item.UserId; }
+                                    @if (@item.IsActive == true)
+                                    {
+                                        <a class="info_link_Active_Deactive_color" id="@ids" href="@Url.Action("UpdateUser", "Vendor", new { id = item.UserId }) ">Active</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="info_link_Active_Deactive_color" id="@ids" href="@Url.Action("UpdateUser", "Vendor", new { id = item.UserId }) ">DeActive</a>
+                                    }
+                                </td>
+
+                                <td class="uk-text-center">
+                                    @*<a href="#"><i class="md-icon material-icons">&#xE254;</i></a>*@
+                                    @*<a href="@Url.Action("Edit", "Vendor", new { id = item.CustomerId })"><i class="material-icons">&#xE0BE;</i></a>
+                                    <a href="@Url.Action("Details", "Vendor", new { id = item.UserId })"><i class="md-icon material-icons">&#xE88F;</i></a>
+                                    <a class="md-fab md-fab-primary" href="#"><i class="material-icons">&#xE0BE;</i></a>*@
+                                    <a class="md-fab-wrapper md-fab-in-card md-fab-speed-dial" href="@Url.Action("Edit", "Vendor", new { id = item.CustomerId })"><i class="material-icons">&#xE2C3;</i></a>
+                                    <a class="md-fab md-fab-primary" href="@Url.Action("SendEmailBysubscription", "Vendor", new { id = item.CustomerId })"><i class="material-icons"></i><i class="material-icons md-fab-action-close" style="display:none"></i></a>
+                                </td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+}
+@{
+    if (Model.ToList().Count == 0)
+    {
+        TempData["Message"] = "No Record found !";
+    }
+    else
+    {
+        Html.RenderAction("Paging", "Base");
+    }
+}
+

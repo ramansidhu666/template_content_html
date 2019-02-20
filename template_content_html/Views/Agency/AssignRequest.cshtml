@@ -1,0 +1,128 @@
+﻿@model IEnumerable<HomeHelp.Models.AgencyIndividualModel>
+@{
+    ViewBag.Title = "Agencies";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div style="margin-top:2%">
+    @{
+        Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+    }
+</div>
+<h2 class="page-header">Agencies</h2>
+<!-- begin row -->
+@using (Html.BeginForm())
+{
+<div class="row">
+    <!-- begin col-12 -->
+    <div class="col-md-12">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title"></h4>
+            </div>
+            <div class="panel-body table-responsive">
+                <table id="example" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Work Rate</th>
+                            <th>Address</th>
+                            <th>Contact Number</th>
+                            <th></th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+
+                        @{ var odd = true; }
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(odd ? "odd gradeX" : "even gradeX")">
+                                <td>@item.FullName</td>
+                                <td>@item.EmailId</td>
+                                <td>@item.WorkRate</td>
+                                <td>@item.Address</td>
+                                <td>@item.ContactNumber</td>
+                                <td><input type="radio" name="radio_assign" value="@item.AgencyIndividualId" /></td>
+                               
+                            </tr>
+                                    odd = !odd;
+                        }
+                       
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer"><input id="assign_btn" type="button" value="Assign" class="btn btn-success" style="float:right" /></div>
+        </div>
+        <!-- end panel -->
+    </div>
+    <!-- end col-12 -->
+</div>
+<!-- end row -->
+}
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+        var pageNo = @ViewBag.currentPageNumber;
+        if(parseInt(@ViewBag.currentPageNumber)>0)
+        {
+            var table = $('#example').DataTable({"displayStart": (10*parseInt(@ViewBag.currentPageNumber))-10});
+        }
+        else{
+            $('#example').DataTable();
+        }
+        $('#example').on('page.dt', function () {
+            var info = $('#example').DataTable().page.info();
+            pageNo = info.page + 1;
+            $.get('@Url.Action("Pagination", "Agency")', {currentPageNumber: pageNo,currentView:"Index"}, function (data) {
+            });
+        });
+
+        $("#assign_btn").click(function () {
+            $('#assign_btn').button('loading');
+            var id=$('input[name=radio_assign]:checked').val()
+            if (id == undefined) {
+                $('#assign_btn').button('reset');
+                swal("", "Please select your choice", "error")
+
+            }
+            else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Agency/AssignRequest',
+                    data: JSON.stringify({ assignedId: id,jobRequestId:@Session["AssignJobId"]}),
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result == false) {
+                            $('#assign_btn').button('reset');
+                            swal("Sorry", "Something went wrong.Please try again.", "error")
+                        }
+                        else{
+                            swal({
+                                title: "Success?",
+                                text: "Email sent to the assign service provider.",
+                                type: "success",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Ok",
+                                closeOnConfirm: false,
+                            },
+                            function(isConfirm) {
+                                if (isConfirm) {
+                                    $('#assign_btn').button('reset');
+                                    window.location.href="/Agency/Index"
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        $('#assign_btn').button('reset');
+                        swal("Sorry", "Something went wrong.Please try again.", "error")
+
+                    }
+                });
+            }
+
+        });
+    });
+</script>

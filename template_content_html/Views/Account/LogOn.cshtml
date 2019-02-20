@@ -1,0 +1,152 @@
+﻿@model HomeHelp.Models.LogOnModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = true;
+}
+<style>
+    .errorMessage {
+        color: #b52626;
+        font-weight: bold;
+        font-size: initial;
+        margin-top: 4px;
+    }
+
+</style>
+@using (Html.BeginForm())
+{
+    <div class="login login-v2" data-pageload-addclass="animated fadeIn">
+        <header class="text-center"><img class="m-t-10" src="~/assets/img/login-bg/home-logo.png" /></header>
+        <div class="login-content">
+            <form class="margin-bottom-0">
+                <div class="form-group m-b-20">
+                    @Html.TextBoxFor(m => m.UserName, new { placeholder = Html.DisplayNameFor(m => m.UserName), id = "Email", @class = "form-control input-lg", @type = "email" })
+                    <div class="errorMessage">@Html.ValidationMessageFor(model => model.UserName)</div>
+                </div>
+                <div class="form-group m-b-20">
+                    @Html.PasswordFor(m => m.Password, new { placeholder = Html.DisplayNameFor(m => m.Password), id = "Password", @class = "form-control input-lg", @type = "password" })
+                    <div class="errorMessage">@Html.ValidationMessageFor(model => model.Password)</div>
+                </div>
+                @*<div class="checkbox m-b-20">
+                        <label>
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>*@
+                <div class="login-buttons">
+                    <button id="login_btn" type="button" class="btn btn-success btn-block btn-lg">Sign in</button>
+                </div>
+                <div class="clearfix">
+                    <div class="m-t-20 pull-left">
+                        <a href="#" onclick="location.href='@Url.Action("ForgotPassword", "Account")'"> Forgot password?</a>
+                    </div>
+                    <div class="m-t-20 pull-right">
+                        <a href="#" onclick="location.href='@Url.Action("SignUp", "Account")'">Sign Up?</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- #modal-dialog -->
+
+}
+
+
+
+<script src="~/Scripts/jquery.cookie.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($.cookie('EmailID') != "" && $.cookie('Password') != "") {
+            $('#email').val($.cookie('EmailID'));
+            $('#password').val($.cookie('Password'));
+            $('#chkloggedin').attr('checked', true);
+        }
+
+        function sweetalert(isSuccess, message) {
+            swal("", message, isSuccess)
+        }
+        $("#login_btn").click(function () {
+            $('#login_btn').button('loading');
+            var email = document.getElementById("Email").value;
+            var password = document.getElementById("Password").value;
+            if (email == "") {
+                $('#login_btn').button("reset");
+                sweetalert('error', 'Please enter Email.')
+
+            }
+            else if (password == "") {
+                $('#login_btn').button("reset");
+                sweetalert('error', 'Please enter Password.')
+            }
+            else {
+                var model = { UserName: email, Password: password}
+                $.ajax({
+                    type: 'POST',
+                    url: '/Account/LogOn',
+                    data: JSON.stringify(model),
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result == false) {
+                            $('#login_btn').button("reset");
+                            sweetalert('error', 'Incorrect Email or Password.');
+                        }
+                        else if (result == "notAllow") {
+                            $('#login_btn').button("reset");
+                            sweetalert('error', 'Incorrect Email or Password.');
+                        }
+                        else if (result == "superadmin") {
+                            window.location.href="/SuperAdmin/Dashboard"
+                        }
+                        else if (result == "agency") {
+                            window.location.href="/Agency/Index"
+                        }
+                    },
+                    error: function () {
+                        $('#login_btn').button("reset");
+                        sweetalert('error', 'Something went wrong please try again.')
+                    }
+                });
+            }
+
+        });
+
+        $('#Email, #Password').keypress(function (e) {
+            var email = document.getElementById("Email").value;
+            var password = document.getElementById("Password").value;
+            if (e.which == 13) {
+                if (email == "") {
+                    sweetalert('error', 'Incorrect Email or Password.');
+
+                }
+                else if (password == "") {
+                    sweetalert('error', 'Incorrect Email or Password.');
+                }
+                else {
+                    var model = { UserName: email, Password: password}
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Account/LogOn',
+                        data: JSON.stringify(model),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            if (result == false) {
+                                sweetalert('error', 'Incorrect Email or Password.');
+                            }
+                            else if (result == "notAllow") {
+                                sweetalert('error', 'Incorrect Email or Password.');
+                            }
+                        },
+                        error: function () {
+                            sweetalert('error', 'Something went wrong please try again.')
+
+                        }
+                    });
+                }
+            }
+        });
+
+    });
+
+</script>
+

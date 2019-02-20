@@ -1,0 +1,319 @@
+﻿@model HomeHelp.Models.JobDetails
+@{
+    ViewBag.Title = "Job";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div style="margin-top:2%">
+    @{
+        Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+    }
+</div>
+@using (Html.BeginForm())
+{
+
+    <h2 class="page-header">Job Details</h2>
+    <div class="profile-container">
+        <!-- begin profile-section -->
+        <div class="profile-section">
+            <!-- begin profile-right -->
+            <div class="">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    <!-- begin table -->
+                    <div class="table-responsive">
+                        <table class="table table-profile">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="field">First Name</td>
+                                    <td><a href="#">@Model.request.FirstName</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Last Name</td>
+                                    <td><a href="#"> @Model.request.LastName</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Address</td>
+                                    <td><i class="fa fa-map-marker text-danger fa-fw"></i>@Model.request.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">EmailId</td>
+                                    <td><a href="#">@Model.request.EmailId</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Phone No</td>
+                                    <td><i class="fa fa-mobile fa-lg m-r-5"></i> @Model.request.MobileNumber</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Description</td>
+                                    <td><a href="#">@Model.request.Description</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Work Hours</td>
+                                    <td><a href="#">@Model.request.NumberOfHours</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Category Name</td>
+                                    <td><a href="#">@Model.CategoryName</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Job Status</td>
+                                    <td><a href="#">@Model.request.JobStatus</a></td>
+                                </tr>
+                                @if (@Model.request.IsPaid == true)
+                                {
+                                <tr>
+                                    <td class="field">Payment</td>
+                                    <td class="amount_text">Paid Amount</td>
+                                    <td class="amount_text_align">Tip Amount</td>
+                                </tr>
+                                <tr>
+                                    <td class="field"></td>
+                                    <td class="amount_textvalue">@Model.customerPaymentModel.PaidAmount</td>
+                                    <td class="amount_text_align amount_textvalue">@Model.customerPaymentModel.TipAmount</td>
+                                </tr>
+                                }
+                                else
+                                {
+                                <tr>
+                                    <td class="field">Payment</td>
+                                    <td>Pending</td>
+                                </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- end table -->
+                </div>
+                <!-- end profile-info -->
+            </div>
+            <!-- end profile-right -->
+
+
+        </div>
+
+        <div class="profile-section">
+            <!-- begin profile-right -->
+            <div class="">
+                <!-- begin profile-info -->
+                <div class="profile-info">
+                    @if (@Model.agencyIndividualModel != null)
+                    {
+                         <!-- begin table -->
+                    <div class="table-responsive">
+                        <table class="table table-profile">
+                            <thead><span style="font-size: large; color: #00acac">Details of person who is assigned to this job</span></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="field">Name</td>
+                                    <td><a href="#">@Model.agencyIndividualModel.FullName</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Address</td>
+                                    <td><i class="fa fa-map-marker text-danger fa-fw"></i>@Model.agencyIndividualModel.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">EmailId</td>
+                                    <td><a href="#">@Model.agencyIndividualModel.EmailId</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Phone No</td>
+                                    <td><i class="fa fa-mobile fa-lg m-r-5"></i> @Model.agencyIndividualModel.ContactNumber</td>
+                                </tr>
+                                <tr>
+                                    <td class="field">Work Rate</td>
+                                    <td><a href="#">@Model.agencyIndividualModel.WorkRate</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- end table -->
+                    }
+                    else if (@Model.customerModel != null)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-profile">
+                                <thead><span style="font-size: large; color: #00acac">Details of person who is assigned to this job</span></thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="field">Name</td>
+                                        <td><a href="#">@Model.customerModel.FirstName</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Address</td>
+                                        <td><i class="fa fa-map-marker text-danger fa-fw"></i>@Model.customerModel.Address</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">EmailId</td>
+                                        <td><a href="#">@Model.customerModel.EmailId</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Phone No</td>
+                                        <td><i class="fa fa-mobile fa-lg m-r-5"></i> @Model.customerModel.MobileNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Work Rate</td>
+                                        <td><a href="#">@Model.customerModel.WorkRate</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                    <span style="font-size: large; color: #00acac">Details of person who is assigned to this job</span>
+                    <h3 style="text-align: left;"><span style="color:#00acac; font-size:large; font-weight:bold;">Not assign Yet.</span></h3>
+                    }
+
+                </div>
+                <!-- end profile-info -->
+            </div>
+            <!-- end profile-right -->
+        </div>
+        <!-- begin profile-section -->
+        @if (Model.Reviews.Count() > 0)
+        {
+        <div class="profile-section">
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-4 -->
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h3 style="text-align: left;"><span style="color: #00acac !important; font-size: large; font-weight: bold;">Reviews <small>@Model.TotalReviews reviews</small></span></h3>
+                        </div>
+                        <div class="col-md-9 align-right">
+                            <input type="button" value="Delete Selected Reviews" class="delReviews btn btn-success m-r-5 m-b-5" data-bind="@Model.request.JobRequestId" />
+                        </div>
+                    </div>
+                    <!-- begin scrollbar -->
+                    <div data-scrollbar="true" data-height="280px" class="bg-silver">
+                        <!-- begin chats -->
+                        <ul class="chats">
+                            @{ var odd = true; }
+                            @foreach (var item in Model.Reviews)
+                                {
+                            <li class="@(odd ? "left" : "right")">
+                                <div class="row">
+
+                                    <div class="col-md-11">
+                                        <span class="date-time" style="font-size: 13px !important;font-weight: 600;color: #00acac;">Rating - @item.Rating</span>
+                                        @*<span class="date-time">yesterday 11:23pm</span>*@
+                                        <a href="javascript:;" class="name">@item.CustomerName</a>
+                                        <a href="javascript:;" class="image">
+                                            @if ((@item.PhotoPath != "") && (@item.PhotoPath != null))
+                                                    {
+                                            <img src="@Url.Content(item.PhotoPath)" alt="" />
+
+
+                                                    }
+                                                    else
+                                                    {
+                                            <img src="/assets/img/download.jpg" />
+                                                    }
+
+
+                                        </a>
+                                        <div class="message">
+                                            @item.Review
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="    padding-left: 6%;padding-top: 1.5%;"><input type="checkbox" class="chkReview" value="@item.ReviewAndRatingId" /></div>
+                                </div>
+                            </li>
+                                                    odd = !odd;
+                                }
+
+
+                        </ul>
+                        <!-- end chats -->
+                    </div>
+                    <!-- end scrollbar -->
+                </div>
+                <!-- end col-4 -->
+
+            </div>
+            <!-- end row -->
+        </div>
+        }
+        else
+        {
+        <h3 style="text-align: left;"><span style="color:#00acac; font-size:large; font-weight:bold;">Reviews <small>No reviews</small></span></h3>
+        }
+    </div>
+    <!-- begin profile-right -->
+}
+<script type="text/javascript">
+    //Initialize tooltip with jQuery
+    $(document).ready(function () {
+
+        function sweetAlert(isSuccess, message) {
+            if (isSuccess == true) {
+                swal({
+                    title: "Success",
+                    text: message,
+                    type: "success",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Ok",
+                    closeOnConfirm: false,
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $('#add_btn').button('reset');
+                        window.location.reload();
+                    }
+                });
+            }
+            else {
+                swal("Failed", "Something went wrong.Please try again.")
+            }
+            
+        }
+
+        $(".delReviews").click(function () {
+            //debugger;
+            $(".delReviews").button('loading');
+            var $buttonClicked = $(this);
+            var input = $(this);
+            var id = null;
+            if ($(input).data().bind) {
+                id = $(input).data().bind;
+            }
+            var checkedValues = $('input:checkbox:checked').val();
+            if (checkedValues!=undefined) {
+                var selected_value = []; // initialize empty array
+                $(".chkReview:checked").each(function () {
+                    selected_value.push($(this).val());
+                });
+                $.ajax({
+                    url: "/Job/DeleteReviews",
+                    data: { 'Ids': selected_value },
+                    type: "POST",
+                    success: function (data) {
+                        if (data == true) {
+                            $(".delReviews").button('reset');
+                            sweetAlert(true, "Review deleted successfully.")
+                        }
+                        else {
+                            $(".delReviews").button('reset');
+                            swal("Failed", "Something went wrong.Please try again.", "error")
+                        }
+                    },
+                    error: function () {
+                        $(".delReviews").button('reset');
+                        swal("Failed", "Something went wrong.Please try again.", "error")
+                    }
+                });
+            }
+            else {
+                $(".delReviews").button('reset');
+                swal("Sorry", "Please select atleast one review to delete.","error")
+            }
+
+        });
+    });
+</script>

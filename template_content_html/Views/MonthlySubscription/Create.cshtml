@@ -1,0 +1,80 @@
+﻿
+@model Onlo.Models.MonthlySubscriptionModel
+@{
+    ViewBag.Title = "Monthly Subscription";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btncancel").click(function (event) {
+
+            event.preventDefault();
+            var url = '@Url.Action("Index", "MonthlySubscription")';
+            window.location.href = url;
+        });
+
+
+    });
+
+</script>
+@{
+    Html.RenderAction("DisplayMessage", "Base", new { ShowMessage = TempData["ShowMessage"], MessageBody = TempData["MessageBody"] });
+}
+
+@using (Html.BeginForm("Create", "MonthlySubscription", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+  
+
+    <h3 class="heading_b uk-margin-bottom">Monthly Subscription</h3>
+    <div class="md-card">
+                <div class="md-card-content">
+                    <h3 class="heading_a"></h3>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2 uk-width-large-1-2">
+                            @Html.LabelForRequired(model => model.SubscriptionMonth)
+                            
+                            @{
+                              var domainsList = new SelectList(new[]
+                                        {
+                                        new SelectListItem{ Text="Select...", Value = " " },
+                                        new SelectListItem{ Text="January", Value = "January" },
+                                        new SelectListItem{ Text="February", Value = "February" },        
+                                        new SelectListItem{ Text="March", Value = "March" },
+                                          new SelectListItem{ Text="April", Value = "April" },
+                                        new SelectListItem{ Text="May", Value = "May" },
+                                          new SelectListItem{ Text="June", Value = "June" },
+                                        new SelectListItem{ Text="July", Value = "July" },
+                                          new SelectListItem{ Text="August", Value = "August" },
+                                        new SelectListItem{ Text="September", Value = "September" },
+                                          new SelectListItem{ Text="October", Value = "October" },
+                                        new SelectListItem{ Text="November", Value = "November" },
+                                        new SelectListItem{ Text="December", Value = "December" },
+                                       
+
+                                        }, "Value", "Text", new { @class = "form-control col-md-7 col-xs-12" });
+
+                                        @Html.DropDownList("SubscriptionMonth", domainsList, new { @class = "data-md-selectize req" })
+                                  @Html.ValidationMessageFor(model => model.SubscriptionMonth,null, new { @class = "validationErrorMessagecolor" })
+                            }
+                         
+                            @Html.LabelForRequired(model => model.SubscriptionPrice)         
+                            @Html.TextBoxFor(model => model.SubscriptionPrice, new { @class = "md-input" })
+                            @Html.ValidationMessageFor(model => model.SubscriptionPrice,null, new { @class = "validationErrorMessagecolor" })
+
+
+                        </div>
+                       
+                            <div class="uk-width-1-1" style="text-align:left">
+                                <input type="submit" value="Submit" class="md-btn md-btn-primary" />
+                                <input type="button" value="Cancel" class="md-btn md-btn-primary" id="btncancel" />
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+}
+<p class="operation">
+    <i class="fa fa-mail-reply create_icon"></i>
+    @Html.ActionLink(" Back to List", "Index")
+</p>

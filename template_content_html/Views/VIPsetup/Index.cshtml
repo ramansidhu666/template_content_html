@@ -1,0 +1,160 @@
+﻿@model IEnumerable<Onlo.Models.VIPsetupModel>
+@{
+    ViewBag.Title = "VIPsetup";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<h2>Users</h2>
+@using (Html.BeginForm())
+{
+   
+
+}
+<div class="md-card uk-margin-medium-bottom uk-margin-medium-top">
+    <div class="md-card">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="mytable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-2-10 uk-text-center"><span>EmailId</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Address</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>phoneNumber</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Requirement_Text</span></th>
+                            <th class="uk-width-2-10 uk-text-center"><span>Remove</span></th>
+                            @*<th><input type="checkbox" id="checkAll" /></th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <tr>
+
+                                <td class="">@item.EmailId</td>
+                                <td class="">@item.Address</td>
+                                <td class="">@item.phoneNumber</td>
+                                <td class="">@item.Requirement_Text</td>
+                                <td>
+                                    @*<input type="checkbox" class="checkBox"
+                                           value="@item.VIPsetupId" />*@
+
+                                    <input type="checkbox" class="chkitem" value="@item.VIPsetupId" />
+                                </td>
+                                
+                                @*<td><a href="@Url.Action("AddProducts", "User", new { UserId = @item.UserId })">Add Products</a></td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+               
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@{
+    if (Model.ToList().Count == 0)
+    {
+        TempData["Message"] = "No Record found !";
+    }
+    else
+    {
+        Html.RenderAction("Paging", "Base", new { @CurrentPageNo = @ViewBag.CurrentPageNo });
+    }
+}
+<script type="text/javascript">
+    $(function () {
+        $('.first').click(function () {
+            findPageNo();
+        });
+        $('.prev').click(function () {
+            findPageNo();
+        });
+        $('.next').click(function () {
+            findPageNo();
+        });
+        $('.last').click(function () {
+            findPageNo();
+        });
+
+        function findPageNo() {
+
+            debugger;
+            var res = $('.pagedisplay').val().split('/');
+            $("tr").each(function () {
+                var a_href = $(this).find('a.glyphicon.glyphicon-edit.edit_icon').attr('href');
+
+
+                if (typeof a_href != "undefined") {
+
+
+                    var hrefSplit = a_href.split('=');
+                    var newHref = hrefSplit[0] + '=' + res[0];
+                    $(this).find('a.glyphicon.glyphicon-edit.edit_icon').attr('href', newHref);
+                }
+            });
+        }
+    });
+    $(document).on("click", ".chkitem", function (e) {
+        debugger;
+        var selected = new Array();
+        if ($(this).is(":checked")) {
+           // alert($(this).val());
+
+            selected.push(this.value);
+            $.ajax({
+                type: "POST",
+                url: "/VIPsetup/Delete?VIPsetupId=" +selected,
+
+                data: { "Checkboxvalue": this.value },
+            async: false,
+            success: function (data) {
+               // alert("successfully removed");
+                setTimeout(function () {// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 500);
+            },
+            dataType: 'html',
+            error: function (data) {
+                alert("fail");
+            }
+        });
+    }
+    });
+    //$(document).ready(function () {
+
+    //    $("#checkAll").click(function () {
+    //        $(".checkBox").prop('checked',
+    //            $(this).prop('checked'));
+    //    });
+
+    //    $("#delete").click(function () {
+    //       debugger;
+    //        var selectedIDs = new Array();
+    //        $('input:checkbox.checkBox').each(function () {
+    //            if ($(this).prop('checked')) {
+    //                selectedIDs.push($(this).val());
+    //            }
+    //        });
+
+    //        var options = {};
+    //        options.url = "/VIPsetup/Delete";
+    //        options.type = "POST";
+    //        options.data = JSON.stringify(selectedIDs);
+    //        options.contentType = "application/json";
+    //        options.dataType = "json";
+    //        options.success = function (msg) {
+    //            alert(msg);
+    //        };
+    //        options.error = function () {
+    //            alert("Error while deleting the records!");
+    //        };
+    //        $.ajax(options);
+
+    //    });
+    //});
+
+</script>
